@@ -213,9 +213,11 @@ module.exports.certsGetOne = function (request, response, next) {
             var leadTime = res.rows[0].devicesCertsDeviceCertLeadTime;
             var certtype = res.rows[0].certTypeId;
             var certRevoked = res.rows[0].devicesCertsRevoked; 
+            revokedVis="hidden";
             if (res.rows[0].devicesCertsRevoked) {
                 var certRevokedDate = date.format(res.rows[0].devicesCertsRevokedDate, 'YYYY-MM-DD');
                 certRevoked = "checked"
+                revokedVis = "visible"
             };
             // var sysname = res.rows[0].systemname;
             var certfile = res.rows[0].devicesCertsCertFile;
@@ -223,7 +225,7 @@ module.exports.certsGetOne = function (request, response, next) {
             console.log(res.rows)
             console.log("render one cert")
             response
-                .render('getCert', { data: res.rows, certtype: certtype, projects: projects,devices: devices, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact,certuserEmail: certuserEmail, sdate: sdate, edate: edate, projectname: projectname, devicename: devicename, dleft: daysLeft,certfile: certfile,certid: id,accessLvl: accessLvl });
+                .render('getCert', { data: res.rows, certtype: certtype, projects: projects,revokedVis: revokedVis,devices: devices, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact,certuserEmail: certuserEmail, sdate: sdate, edate: edate, projectname: projectname, devicename: devicename, dleft: daysLeft,certfile: certfile,certid: id,accessLvl: accessLvl });
         })
     } else {
         console.log("exit 2");
