@@ -21,7 +21,7 @@ var select2 = require('select2');
 var usersRouter = require('./routes/users');
 var certsRouter = require('./routes/certs');
 var deviceRouter = require('./routes/device');
-
+var projectsRouter = require('./routes/projects');
 
 
 
@@ -267,12 +267,12 @@ app.get('/admin', (req, res,next) => {
     }}
 });
 
-app.get('/systems', (req, res,next) => {
+app.get('/projects', (req, res,next) => {
     console.log("systems");
     if (req.session.user && req.cookies.user_sid) {
         if (accessLvl == 1) {
             // res.sendFile(__dirname + '/public/pages/signup.html');
-            app.use('/systems',usersRouter);
+            app.use('/projects',projectsRouter);
         next();
     } else {
         res.redirect('/login');

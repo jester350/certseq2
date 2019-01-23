@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 
-var ctrlUsers = require("../controllers/projects.controller.js");
+var ctrlProjects = require("../controllers/projects.controller.js");
 
 console.log("projects route");
 
@@ -9,6 +9,6 @@ console.log("projects route");
 //  res.render("list_certs", { title: "BPDTS Certs" });
 //});
 
-router.route("/").get(ctrlSystems.admin);
+router.route("/").get(ctrlProjects.listall);
 
 module.exports = router;
