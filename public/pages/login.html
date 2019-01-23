@@ -1,0 +1,54 @@
+<html>
+    <head>
+
+<!-- CSS -->	
+<style type="text/css">
+    html, 
+    body {
+    height: 100%;
+    }
+    
+    body {
+    background-image: url(../images/bgimage.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    }
+    </style>
+
+        <title>Login Here</title>
+        <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
+        <script src="/jquery/jquery.js"></script>
+        <script src="/bootstrap/js/bootstrap.min.js"></script>
+    
+    
+    
+    </head>
+    <body class="container">
+        <div class="page-header">
+            <h1>SSL Certificate Database</h1>
+        </div>
+
+        
+
+
+        
+
+        <div class="container row">
+            <div class="jumbotron col-sm-4 pull-center">
+                <form action="/login" method="post">
+                    <div>
+                        <label>Username:</label>
+                        <input type="text" name="username"/>
+                    </div>
+                    <div>
+                        <label>Password:</label>
+                        <input type="password" name="password"/><br>
+                    </div>
+                    <div>
+                        <br><input class="btn btn-primary" type="submit" value="Log In"/>
+                    </div>
+                </form>                  
+            </div>          
+        </div>
+    </body>
+</html>

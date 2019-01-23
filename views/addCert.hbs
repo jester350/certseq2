@@ -1,0 +1,130 @@
+
+<div class="container jf-form">
+<form data-licenseKey="" name="jqueryform-4d4fe5" id="jqueryform-4d4fe5" action='admin.phxp' method='post' enctype='multipart/form-data' novalidate autocomplete="on">
+<input type="hidden" name="method" value="validateForm">
+<input type="hidden" id="serverValidationFields" name="serverValidationFields" value="">
+
+
+
+<div class="form-group f2 required" data-fid="f2">
+  <label class="control-label" for="f2">Email</label>
+
+<div class="input-group"><span class="input-group-addon left"><i class="glyphicon glyphicon-envelope"></i> </span>
+<input type="email" class="form-control" id="f2" name="f2" value=""   
+    data-rule-email="true" 
+    data-rule-required="true"  />
+</div>
+  
+</div>
+
+<div class = "row">
+<div class = "col-md-1"></div>
+<div class = "col-md-10">
+<form action="postcert" method="post" name="addcert" id="addcert" encType="multipart/form-data">
+    <label for="name">Cert Name:</label>
+    <input type="text" name="name" id="name"><br>
+    <label for="date3">Start Date:</label>
+    <input type="date" name="start_date" id="date"><br>
+    <label for="date4">Expiry Date:</label>
+    <input type="date" name="expiry_date" id="date2"><br>
+
+<div class="form-group f9 " data-fid="f9">
+  <label class="control-label" for="f9">Device</label>
+
+
+<select class="form-control" id="f9" name="f9[]" multiple="multiple">
+      {{#each devices}}
+        <option value="{{deviceid}}" selected>{{devicename}}</option>
+      {{/each}}
+</select>
+</div>
+
+    <label for="name">User : </label>
+    <select name = "user">
+        {{#each userlist}}
+        <option value="{{userid}}">{{useremail}}</option>
+        {{/each}}
+    </select><br>
+
+
+
+    <input type="file" name="theFile" />
+    <br><input type="submit" value='Submit'>
+</form>
+</script>
+<br>
+
+
+
+
+
+
+
+
+
+<!-- [ Start: Select2 support ] ---------------------------------- -->
+<link rel="stylesheet" type="text/css" href="/modules/select2/dist/css/select2.min.css">
+<script type="text/javascript" src="/modules/select2/dist/js/select2.full.min.js"></script>
+<style type="text/css">
+.select2-hidden-accessible{
+	opacity: 0;
+    width:1% !important;
+}
+.select2-container .select2-selection--single{
+  height: 34px;
+  padding-top: 2px;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  border: 1px solid #ccc;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow{
+  top: 4px;
+}
+</style>
+<script type="text/javascript">
+;(function(){
+	
+	function templateResult (obj) {
+	  if (!obj.id) { return obj.text; }
+
+	  var img = $(obj.element).data('imgSrc');
+	  if( img ){
+	    return $( '<span><img src="' + img + '" class="img-flag" /> ' + obj.text + '</span>' );
+	  };
+
+	  return obj.text;
+	};
+	 
+	$(".jf-form select").css('width', '100%'); // make it responsive
+	$(".jf-form select").select2({
+	  templateResult: templateResult
+	}).change( function(e){
+	  $(e.target).valid();
+	});
+
+})();
+</script>
+<!-- [ End: Select2 support ] ---------------------------------- -->
+
+
+<script type="text/javascript">
+
+	// start jqueryform initialization
+	// --------------------------------
+	JF.init('#jqueryform-4d4fe5');
+
+	// watch form element change event to run jqueryform's formlogic
+	// ---------------------------------------------------------------
+	var logics = [
+    {
+        "disabled": false,
+        "action": "",
+        "selector": "",
+        "match": "",
+        "rules": []
+    }
+];
+	$('input,input:radio,select').change(function(){
+		$.formlogic( {logics: logics} );
+	});
+</script>
+</body>

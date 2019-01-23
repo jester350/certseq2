@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<script>console.log("IN layout.hbs");</script>
+<head>
+  <title>{{title}}</title>
+
+  <script src="/jquery331/jquery-3.3.1.min.js"></script>
+
+  <!-- Latest compiled and minified CSS & JS -->
+  <script src="/javascript/popper.min.js"></script>
+  <link rel="stylesheet" media="screen" href="/bootstrap/css/bootstrap.min.css">
+
+  
+  <script src="/bootstrap/js/bootstrap.min.js"></script>
+  <link  href='/css/style.css' rel="stylesheet" type="css">
+  <link href="/javascript/jQueryAssets/jquery.ui.core.min.css" rel="stylesheet" type="css">
+  <link href="/javascript/jQueryAssets/jquery.ui.theme.min.css" rel="stylesheet" type="css">
+  <link href="/javascript/jQueryAssets/jquery.ui.datepicker.min.css" rel="stylesheet" type="css">
+  <script src="/javascript/jquery-1.11.1.min.js"></script>
+  <script src="/javascripts/jquery.ui-1.10.4.datepicker.min.js"></script>
+  <script src="/modules/date-and-time/date-and-time.min.js"></script>
+  <script type="text/javascript">
+</script>
+<div class = "row">
+  <div class="col-md-1"></div>
+<div class="col-md-10 bg-info">
+    <h1>
+        {{title}} : {{accessLvl}} : {{certid}} : {{certdevicejuncid}}
+        <a href="/logout" class = "btn btn-primary float-right" style="margin-top:5px; margin-right:5px;">Log&nbsp;Out</a>
+
+                  <div class="btn-group float-right">
+                      <button class="btn btn-danger dropdown-toggle" style="margin-top:5px;margin-right:5px;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        ADMIN
+                      </button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item btn-primary" href="/admin/">Users</a>
+                        <a class="dropdown-item" href="/systems/">Projects</a>
+                        <a class="dropdown-item" href="/devices/">Devices</a>
+                      </div>
+                  </div>
+
+
+                          <div class="btn-group float-right">
+                      <button class="btn btn-danger dropdown-toggle" style="margin-top:5px;margin-right:5px;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        ADD
+                      </button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item btn-primary" href="/certs/addcert">Add Certificate</a>
+                        <a class="dropdown-item" href="/admin/adduser">Add User</a>
+                        <a class="dropdown-item" href="/systems">Add Project</a>
+                        <a class="dropdown-item" href="/devices/add">Add Device</a>
+                      </div>
+                  </div>
+
+        <a href="/certs/" class = "btn btn-success float-right" style="margin-top:5px;margin-right:5px;">Home</a>
+    </h1>
+    
+    </div>
+    </div><br>
+    
+</head>
+
+<body>
+  {{{body}}}
+</body>
+
+</html>

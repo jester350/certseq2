@@ -1,0 +1,120 @@
+
+<div class = "row">
+<div class = "col-md-1"></div>
+<div class = "col-md-10">
+
+
+
+<form action="updatecert" method="post" name="updatecert" id="updatecert" encType="multipart/form-data">
+
+    <input type="hidden" id="certid" name="certid" value="{{certid}}">
+    <input type="hidden" id="certdevicejuncid" name="certdevicejuncid" value="{{certdevicejuncid}}">
+    
+    <div class="form-inline">
+        <label for="name" class="col-sm-0 mb-2 mr-sm-2 col-form-label">Certificate Name</label>
+        <div class="form-inline col-sm-3">
+            <input type="text" name="name" id="name" class="form-control mb-2 mr-sm-2" value="{{{certname}}}">
+        </div>
+        <label for="name" class="col-sm-0 col-form-label mb-2 mr-sm-2">Common Name</label>
+        <div class="form-inline col-sm-2">
+            <input type="text" name="commonname" id="commonname" class="form-control mb-2 mr-sm-2" value="{{{commonName}}}">
+        </div>
+    </div>
+
+<br>
+
+        <div class="form-group row">
+            <label for="changeref" class="col-sm-2 col-form-label mb-2 mr-sm-2">Change Reference</label>
+            <div class="col-sm-4">
+                <input type="text" name="changeref" id="changeref" class="form-control mb-2 mr-sm-2" value="{{{changeref}}}">
+            </div>
+        </div>   
+
+        <div class="form-group row">
+            <label for="certtype" class="col-sm-1 col-form-label mb-2 mr-sm-2">Cert Type</label>
+            <div class="col-sm-2">
+                <input type="text" name="certtype" id="certtype" class="form-control mb-2 mr-sm-2" size=5px value="{{{certtype}}}">
+            </div>
+        </div>
+
+        <div class="form-inline">
+            <label for="date3" class="col-sm-0 col-form-label mb-2 mr-sm-2">Start Date</label>
+            <div class="form-inline col-sm-3">
+                <input type="date" name="start_date" id="date" class="form-control mb-2 mr-sm-2" value="{{{sdate}}}">
+            </div>
+            <label for="expiry_date" class="col-sm-0 col-form-label mb-2 mr-sm-2">Expiry Date</label>
+            <div class="form-inline col-sm-2">
+                <input type="date" name="expiry_date" id="expiry_date" class="form-control mb-2 mr-sm-2" value="{{{edate}}}">
+            </div>
+        </div>
+        
+        <br>
+        <div class="form-group row">
+            <label for="leadtime" class="col-sm-2 col-form-label mb-2 mr-sm-2">Lead Time Days </label>
+            <div class="col-sm-0">
+                <input type="text" name="leadtime" id="leadtime" class="form-control mb-1" size=2px value="{{{leadTime}}}">
+            </div>
+        </div>
+
+        <div class="form-inline">
+            <label for="certRevoked" class="col-sm-0 col-form-label mb-2 mr-sm-2">Revoked</label>
+            <div class="form-inline col-sm-1">
+                <input type="checkbox" name = "certRevoked" id="certRevoked" value="revoked" onClick = "JavaScript:toggleVisibility(this,'certRevokedDate');" {{{certRevoked}}}>
+            </div>
+                <input type="date" name="certRevokedDate" id="certRevokedDate" class="form-control mb-1" value="{{{certRevokedDate}}}"><br>
+        </div>
+
+
+<br>
+
+
+        <div class="form-group row">
+            <label for="name" class="col-sm-1 col-form-label mb-2 mr-sm-2">Cert file:</label>
+            <div class="col-sm-5">
+                <input type="text" name="currentCertFile" id="currentCertFile" class="form-control mb-1" value="{{{certfile}}}" />
+                <input type="file" name="newcertfile" id="newcertfile" class=""><br>
+            </div>
+        </div>
+
+        <table class ="table table-bordered table-striped">
+            <thead class ="thead-dark">
+                <tr>
+                <th>Project</th>
+                <th>Device</th>
+                <th>Contact</th>
+                <th>Email</th>
+                </tr>
+            </thead>
+            <tbody id="projects" class="collection with-header">
+            {{#each data}}
+                <tr class="{{classtype}}">
+                    <td>{{name}}</td> 
+                    <td>{{devicesName}}</td>
+                    <td>{{certuserName}}</td>
+                    <td>{{certuserEmail}}</td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+
+    <br><input type="submit" value='Submit'>
+</form>
+</div>
+</div>
+
+<!-- ----------------------------------------------- -->
+
+        <style type="text/css">
+            #certRevokedDate{visibility:hidden;}
+        </style>
+        <script language="JavaScript">
+
+            function toggleVisibility(eventsender, certRevokedDate){
+                var myNewState = "hidden";
+                if (eventsender.checked === true){
+                    myNewState = "visible";
+                }
+
+                document.getElementById(certRevokedDate).style.visibility = myNewState;
+            }       
+        </script>
