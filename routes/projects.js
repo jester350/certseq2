@@ -9,6 +9,6 @@ console.log("projects route");
 //  res.render("list_certs", { title: "BPDTS Certs" });
 //});
 
-router.route("/").get(ctrlProjects.listall);
+router.route("/").all(ctrlProjects.listall);
 
 module.exports = router;
