@@ -102,10 +102,7 @@ module.exports.add = function (request, response, next) {
     //            .render('test', { title: ': Admin'});
 };
 
-module.exports.postUser = function (request, response, next) {
-    console.log("post user : "+request);
-    const id = request.params.certId;
-    User.create({ username: request.body.username,email: request.body.email,password: request.body.password,accessLvl: request.body.accessLvl }).then(function() {
-        response.redirect('/');
-      });
+module.exports.postProject = function (request, response, next) {
+    console.log("post project : "+request);
+
 };

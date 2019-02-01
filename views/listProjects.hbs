@@ -119,7 +119,7 @@ txt += "The node value: " + x.nodeValue + "<br>";
             
     <table class ="table">
         <thead>
-        <form action="/certs" method="post" name="newproject" id="newproject" encType="multipart/form-data">
+        <form action="postProject" method="post" name="newproject" id="newproject" encType="multipart/form-data">
 <div class="col-sm-16">
             <tr>
                 <th>
@@ -128,7 +128,7 @@ txt += "The node value: " + x.nodeValue + "<br>";
                     
                 </th>
                 <th width="290px" height="30">
-                    <select class="form-control mb-2 mr-sm-2" id="newprojectuser" name="f9[]">
+                    <select class="form-control mb-2 mr-sm-2" id="newprojectuser" name="newprojectuser">
                     {{#each userlist}}
                         <option value="{{userid}}">{{useremail}}</option>
                     {{/each}}

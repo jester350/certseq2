@@ -11,4 +11,6 @@ console.log("projects route");
 
 router.route("/").all(ctrlProjects.listall);
 
+router.route("/postProject").all(ctrlProjects.postProject)
+
 module.exports = router;
