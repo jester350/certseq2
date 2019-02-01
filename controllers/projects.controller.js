@@ -104,5 +104,17 @@ module.exports.add = function (request, response, next) {
 
 module.exports.postProject = function (request, response, next) {
     console.log("post project : "+request);
+    name = request.name
+    user = request.user
+    return new Promise(function (resolve, reject) {
+        pool.query('INSERT INTO projects(name, user) VALUES($1, $2)',
+            [name, user],
+            (err, res) => {
+                if (err) return next(err);
+                resolve(name);
+                // response.redirect('/certs');
+            }
+        )
+    })
 
 };
