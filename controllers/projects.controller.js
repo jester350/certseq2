@@ -89,30 +89,22 @@ module.exports.listall = function (request, response, next) {
 
 };
 
-module.exports.add = function (request, response, next) {
-    console.log("user add...");
-    const id = request.params.certId;
-    kev = (path.join(__dirname, '/public'));
-    //console.log("kev dir "+response.public);
-    path.resolve(__dirname, '.../public');
-    // response.sendFile('/public/pages/adduser.html', {root: appRoot});
-    response
-        .render('addUser', { data: response.rows, title: 'Add user' });
-    //response
-    //            .render('test', { title: ': Admin'});
-};
-
 module.exports.postProject = function (request, response, next) {
-    console.log("post project : "+request);
-    name = request.name
-    user = request.user
+    console.log("post project : "+request.body.newproject);
+    projectname = request.body.newproject
+    projectuser = request.body.newprojectuser
+    console.log("###################################################")
+    console.log(projectname)
+    console.log(projectuser)
+    console.log("###################################################")
+
     return new Promise(function (resolve, reject) {
-        pool.query('INSERT INTO projects(name, user) VALUES($1, $2)',
-            [name, user],
+        pool.query('INSERT INTO projects("name", "userId") VALUES($1, $2)',
+            [projectname, projectuser],
             (err, res) => {
                 if (err) return next(err);
-                resolve(name);
-                // response.redirect('/certs');
+                resolve(projectname);
+                response.redirect('/projects');
             }
         )
     })

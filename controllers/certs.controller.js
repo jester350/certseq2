@@ -68,6 +68,7 @@ console.log(response.body);
         LEFT OUTER JOIN ( "device_certs" AS "devices->certs->device_cert" \
         INNER JOIN "certs" AS "devices->certs" ON "devices->certs"."id" = "devices->certs->device_cert"."certId") ON "devices"."id" = "devices->certs->device_cert"."deviceId" \
         LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
+        WHERE "devices->certs"."name" != \'null\' \
         order by "devicesCertsExpirydate";'
 
         console.log("squery : "+squery);
@@ -85,22 +86,27 @@ console.log(response.body);
                     }
                     var today = new Date();
                     for (var i in res.rows) {
-                        var daysLeft = date.subtract(res.rows[i].devicesCertsExpirydate, today).toDays();
-                        res.rows[i].daysleft = daysLeft;
-                        var class_type = "alert alert-success";
-                        if (daysLeft < 30) {
-                            class_type = "alert alert-warning";
-                        }
-                        if (daysLeft < 7) {
-                            class_type = "alert alert-danger";
-                        }
-                        res.rows[i].classtype=class_type;
-                        sdate = date.format(res.rows[i].devicesCertsStartDate, 'DD-MM-YYYY');
-                        console.log(sdate)
-                        res.rows[i].devicesCertsStartDate = sdate;
+                        console.log(res.rows[i])
+                        console.log("device id : "+res.rows[i].devicesId)
+                        if (res.rows[i].devicesId == null) {console.log("NULL!!!")};
+                        if (res.rows[i].devicesId != null) {
+                            var daysLeft = date.subtract(res.rows[i].devicesCertsExpirydate, today).toDays();
+                            res.rows[i].daysleft = daysLeft;
+                            var class_type = "alert alert-success";
+                            if (daysLeft < 30) {
+                                class_type = "alert alert-warning";
+                            }
+                            if (daysLeft < 7) {
+                                class_type = "alert alert-danger";
+                            }
+                            res.rows[i].classtype=class_type;
+                            sdate = date.format(res.rows[i].devicesCertsStartDate, 'DD-MM-YYYY');
+                            console.log(sdate)
+                            res.rows[i].devicesCertsStartDate = sdate;
 
-                        edate = date.format(res.rows[i].devicesCertsExpirydate, 'DD-MM-YYYY');
-                        res.rows[i].devicesCertsExpirydate = edate;
+                            edate = date.format(res.rows[i].devicesCertsExpirydate, 'DD-MM-YYYY');
+                            res.rows[i].devicesCertsExpirydate = edate;
+                        }
                     }
                     console.log("res rows : "+res.rows);
                     // res.rows[0].rowcount = "test";
