@@ -23,11 +23,11 @@
 
     <label for="name">Cert Type</label>
     <select name = "certtype">
-        <option value="cer">CER</option>
-        <option value="cer_p7b">CER/P7B</option>
-        <option value="client">CLIENT</option>
-        <option value="dual">DUAL</option>
-        <option value="p7b">P7B</option>
+        <option value="1">CER</option>
+        <option value="2">CER/P7B</option>
+        <option value="3">CLIENT</option>
+        <option value="4">DUAL</option>
+        <option value="5">P7B</option>
     </select><br>
 
     <label for="date3">Start Date:</label>
@@ -38,11 +38,11 @@
     <label for="leadtime">Lead Time</label>
     <input type="number" name="leadtime" id="leadtime"><br>
 
-<div class="form-group f9 " data-fid="f9">
-  <label class="control-label" for="f9">Device</label>
+<div class="form-group certdevice " data-fid="certdevice">
+  <label class="control-label" for="certdevice">Device</label>
 
 
-<select class="form-control" id="f9" name="f9[]" multiple="multiple">
+<select class="form-control" id="certdevice" name="certdevice" multiple="multiple">
       {{#each devices}}
         <option value="{{deviceid}}" selected>{{devicename}}</option>
       {{/each}}

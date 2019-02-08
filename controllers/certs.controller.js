@@ -293,14 +293,18 @@ module.exports.certPost = function (request, response, next) {
         console.log(body);
         console.log("body");
         var today = new Date();
-        const { name, created_date, created_by, expiry_date, start_date, deviceid } = body;
-
+        deviceid = body.certdevice;
+        const { name, commonname, changeref, certtype, start_date, expiry_date, leadtime } = body;
+        for (var i in deviceid) {
+            console.log(deviceid[i]);
+        }
+        console.log("device : "+name)
         return new Promise(function (resolve, reject) {
-            pool.query('INSERT INTO cert(name, created_date, created_by, expiry_date,start_date,cert_file) VALUES($1, $2, $3, $4, $5,$6)',
-                [name, created_date, created_by, expiry_date, start_date,certFileName],
+            pool.query('INSERT INTO certs(name,"commonName","changeRef",type, expiry_date,start_date,cert_file,"leadTime") VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
+                [name, commonname, changeref,certtype, expiry_date, start_date,certFileName,leadtime],
                 (err, res) => {
                     if (err) return next(err);
-                    resolve(deviceid);
+                    resolve(name);
                     // response.redirect('/certs');
                 }
             )
@@ -310,7 +314,7 @@ module.exports.certPost = function (request, response, next) {
     function getmax() {
         console.log("get max");
         return new Promise(function (resolve, reject) {
-            pool.query('select max(row_id) as max from cert', (err, res) => {
+            pool.query('select max(id) as max from certs', (err, res) => {
                 if (err) return next(err);
                 max = res.rows.max;
                 resolve(res.rows.max);
@@ -320,24 +324,29 @@ module.exports.certPost = function (request, response, next) {
         })
     };
 
-    insertcert(request.body).then((device) => {
+    insertcert(request.body).then((certdevice) => {
         console.log("junction body");
         console.log(request.body);
-        var device = request.body.device;
+        var device = request.body.certdevice;
+        console.log("devices")
         console.log(device);
-        pool.query('select max(row_id) from cert', (err, res) => {
+        pool.query('select max(id) from certs', (err, res) => {
             if (err) return next(err);
             // console.log("max::");
-            // console.log(res.rows[0].max);
+            console.log(res.rows[0].max);
             // console.log("done max 2" + system + ":" + res.rows[0].max)//Value here is defined as u expect.
-            pool.query('INSERT INTO cert_device_junc(cert,device) VALUES($1, $2)',
-                [res.rows[0].max, device],
+            for (var i in device) {
+                console.log(i)
+                console.log(device[i])
+            pool.query('INSERT INTO device_certs("certId","deviceId") VALUES($1, $2)',
+                [res.rows[0].max, device[i]],
                 (err, res) => {
                     if (err) return next(err);
                 });
+            };
         })
 
-        pool.query('select max(row_id) from cert', (err, res) => {
+        pool.query('select max(id) from certs', (err, res) => {
             if (err) return next(err);
             response.redirect('/certs');
         })
