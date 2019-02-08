@@ -7,13 +7,6 @@
 
 
 <div class="form-group f2 required" data-fid="f2">
-  <label class="control-label" for="f2">Email</label>
-
-<div class="input-group"><span class="input-group-addon left"><i class="glyphicon glyphicon-envelope"></i> </span>
-<input type="email" class="form-control" id="f2" name="f2" value=""   
-    data-rule-email="true" 
-    data-rule-required="true"  />
-</div>
   
 </div>
 
@@ -21,12 +14,29 @@
 <div class = "col-md-1"></div>
 <div class = "col-md-10">
 <form action="postcert" method="post" name="addcert" id="addcert" encType="multipart/form-data">
-    <label for="name">Cert Name:</label>
+    <label for="name">Cert Name</label>
     <input type="text" name="name" id="name"><br>
+    <label for="commonname">Common Name</label>
+    <input type="text" name="commonname" id="commonname"><br>
+    <label for="changeref">Change Reference</label>
+    <input type="text" name="changeref" id="changeref"><br>
+
+    <label for="name">Cert Type</label>
+    <select name = "certtype">
+        <option value="cer">CER</option>
+        <option value="cer_p7b">CER/P7B</option>
+        <option value="client">CLIENT</option>
+        <option value="dual">DUAL</option>
+        <option value="p7b">P7B</option>
+    </select><br>
+
     <label for="date3">Start Date:</label>
     <input type="date" name="start_date" id="date"><br>
     <label for="date4">Expiry Date:</label>
     <input type="date" name="expiry_date" id="date2"><br>
+
+    <label for="leadtime">Lead Time</label>
+    <input type="number" name="leadtime" id="leadtime"><br>
 
 <div class="form-group f9 " data-fid="f9">
   <label class="control-label" for="f9">Device</label>
@@ -39,7 +49,7 @@
 </select>
 </div>
 
-    <label for="name">User : </label>
+    <label for="name">Owner : </label>
     <select name = "user">
         {{#each userlist}}
         <option value="{{userid}}">{{useremail}}</option>
