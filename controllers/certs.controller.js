@@ -336,6 +336,7 @@ module.exports.certPost = function (request, response, next) {
             console.log(res.rows[0].max);
             // console.log("done max 2" + system + ":" + res.rows[0].max)//Value here is defined as u expect.
             for (var i in device) {
+                console.log("list devices")
                 console.log(i)
                 console.log(device[i])
             pool.query('INSERT INTO device_certs("certId","deviceId") VALUES($1, $2)',
