@@ -27,16 +27,25 @@ console.log(response.body);
             )
         })
     };
-    function readdb() {
+    function readdb() { 
         console.log("in select db func "+username);
+        console.log(request)
         var certfilter = "";
         var projectfilter = "";
+        var devicefilter = "";
         if (request.body.certFilter) {
-            certfilter = request.body.certFilter.toUpperCase();
+            certfilter = request.body.certFilter;
+            console.log("cert filter"+certfilter)
         }
         if (request.body.projectFilter) {
-            projectfilter = request.body.projectFilter.toUpperCase();
+            projectfilter = request.body.projectFilter;
+            console.log("project filter"+projectfilter)
         }
+        if (request.body.deviceFilter) {
+            devicefilter = request.body.deviceFilter;
+            console.log("device filter"+devicefilter)
+        }
+
         console.log("request query set to : "+request.query);
         console.log("first query vars : "+certfilter+" : "+request.query.certfilter);
         squery = 'SELECT cert.row_id as rowid, cert.name as certname,cert.start_date as certStartDate,cert.expiry_date as certExpiryDate,d.name as projectName,cert.cert_file as certFile,b.name as devicename \
@@ -69,6 +78,9 @@ console.log(response.body);
         INNER JOIN "certs" AS "devices->certs" ON "devices->certs"."id" = "devices->certs->device_cert"."certId") ON "devices"."id" = "devices->certs->device_cert"."deviceId" \
         LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
         WHERE "devices->certs"."name" != \'null\' \
+        AND UPPER(project.name) like \'%'+projectfilter.toUpperCase()+'%\' \
+        and UPPER("devices"."name") like \'%'+devicefilter.toUpperCase()+'%\' \
+        and UPPER("devices->certs"."name") like \'%'+certfilter.toUpperCase()+'%\' \
         order by "devicesCertsExpirydate";'
 
         console.log("squery : "+squery);
@@ -117,7 +129,7 @@ console.log(response.body);
                     console.log(recordDetails);
                     console.log(res.rows)
                     response
-                        .render('list_certs', { data: res.rows.slice(offset,offset+count), recordDetails: recordDetails, title: 'Cert Database' ,uname: username, accessLvl: accessLvl,certfilter: certfilter,projectfilter: projectfilter});
+                        .render('list_certs', { data: res.rows.slice(offset,offset+count), recordDetails: recordDetails, title: 'Cert Database' ,uname: username, accessLvl: accessLvl,certfilter: certfilter,devicefilter: devicefilter, projectfilter: projectfilter});
 
                     // resolve(res.rows[0].rowid);
                 }
