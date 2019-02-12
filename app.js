@@ -1,5 +1,6 @@
 var express = require('express');
 
+
 var path = require('path');
 var fileUpload = require('express-fileupload');
 var bodyParser = require('body-parser');
@@ -15,6 +16,7 @@ var schedule = require('node-schedule');
 var cron = require('./bin/cron');
 var fs = require('fs');
 var select2 = require('select2');
+var favicon = require('express-favicon');
 
 
 // var indexRouter = require('./routes/index');
@@ -57,6 +59,8 @@ app.use('/bootstrap337', express.static(__dirname + '/public/bootstrap-3.3.7/dis
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));
 app.use('/javascript', express.static(__dirname + '/public/javascripts/'));
 app.use('/modules', express.static(__dirname + '/node_modules/'));
+
+app.use(favicon(__dirname + '/public/favicon.png'));
 
 var hbs = require('hbs');
 hbs.registerHelper('compare', function (lvalue, operator, rvalue, options) {
