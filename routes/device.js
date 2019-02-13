@@ -9,7 +9,7 @@ console.log("device route");
 //  res.render("list_certs", { title: "BPDTS Certs" });
 //});
 router.route("/add").all(ctrlDevice.deviceAddOne);
-router.route("/").all(ctrlDevice.deviceGetAll);
+router.route("/").all(ctrlDevice.listall);
 router.route("/postdevice").post(ctrlDevice.devicePost);
 router.route("/record:deviceId").get(ctrlDevice.deviceGetOne);
 //router.route("/updateCert").post(ctrlDevice.deviceUpdate);

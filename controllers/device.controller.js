@@ -8,15 +8,14 @@ var pagerStart=0;
 
 console.log('cert controller');
 
-module.exports.deviceGetAll = function (request, response, next) {
+module.exports.listall = function (request, response, next) {
 console.log("device list all body response");
 console.log(response.body);
     function countrec() {
         console.log("in select db func");
         return new Promise(function (resolve, reject) {
             pool.query('SELECT count(*) as rowcount \
-        FROM devices INNER JOIN device_project_junc ON devices.row_id = device_project_junc.device \
-        inner join projects on projects.row_id = device_project_junc.project', (err, res) => {
+        FROM devices', (err, res) => {
                     kev = 2;
                     if (err) return next(err);
                     console.log(res.rows);
@@ -54,13 +53,7 @@ console.log(response.body);
         WHERE UPPER(devices.name) like \'%'+devicefilter+'%\' and UPPER(projects.name) like \'%'+projectfilter+'%\' \
         ORDER BY devices.name ASC';
 
-        squery = 'SELECT devices.row_id as rowid, devices.name as devicename,projects.name as systemName,users.email as useremail \
-        FROM devices \
-        INNER JOIN device_project_junc ON devices.row_id = device_project_junc.device \
-        inner join projects on projects.row_id = device_project_junc.project \
-        inner join users on users.id = projects.contact \
-        WHERE UPPER(devices.name) like \'%'+devicefilter+'%\' and UPPER(projects.name) like \'%'+projectfilter+'%\' \
-        ORDER BY devices.name ASC';
+        squery = 'SELECT "devices"."id" AS "devicesId", "devices"."name" AS "devicesName" FROM "devices" AS "devices" ORDER BY devices.name ASC';
 
         console.log("squery : "+squery);
         return new Promise(function (resolve, reject) {
@@ -95,7 +88,7 @@ console.log(response.body);
     console.log("call db func");
     kev = "";
     rowcount=countrec();
-    console.log("row count"+rowcount);
+    // console.log("row count"+rowcount);
     readdb().then((rowid) => {
         console.log(rowid)//Value here is defined as u expect.
     });
