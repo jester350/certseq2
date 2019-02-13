@@ -339,21 +339,25 @@ module.exports.certPost = function (request, response, next) {
     insertcert(request.body).then((certdevice) => {
         console.log("junction body");
         console.log(request.body);
-        var device = request.body.certdevice;
+        var tmparry=[];
+        var adddevice=[];
+        var adddevice = tmparry.concat(request.body.certdevice);
         console.log("devices")
-        console.log(device);
+        console.log(adddevice);
         pool.query('select max(id) from certs', (err, res) => {
             if (err) return next(err);
             // console.log("max::");
-            console.log(res.rows[0].max);
+            console.log("max row : "+res.rows[0].max);
             // console.log("done max 2" + system + ":" + res.rows[0].max)//Value here is defined as u expect.
-            for (var i in device) {
-                console.log("list devices") 
-                console.log(i)
-                console.log(device[i])
-            pool.query('INSERT INTO device_certs("certId","deviceId") VALUES($1, $2)',
-                [res.rows[0].max, device[i]],
-                (err, res) => {
+            console.log("list devices") 
+            // for (var entry in device) {
+            // device.forEach(function(entry) {
+            var index;
+            for (index = 0; index < adddevice.length; ++index) {
+                console.log(index+"device : "+adddevice[index])
+                pool.query('INSERT INTO device_certs("certId","deviceId") VALUES($1, $2)',
+                    [res.rows[0].max, adddevice[index]],
+                    (err, res) => {
                     if (err) return next(err);
                 });
             };
