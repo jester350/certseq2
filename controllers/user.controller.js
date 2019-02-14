@@ -34,6 +34,83 @@ module.exports.admin = function (request, response, next) {
     //            .render('test', { title: ': Admin'});
 };
 
+module.exports.listall = function (request, response, next) {
+    console.log("device list all body response");
+    console.log(response.body);
+        function countrec() {
+            console.log("in select db func");
+            return new Promise(function (resolve, reject) {
+                pool.query('SELECT count(*) as rowcount \
+            FROM users', (err, res) => {
+                        kev = 2;
+                        if (err) return next(err);
+                        console.log(res.rows);
+                        console.log('render test after promise');
+                    
+                    return rowcount;
+    
+                        // resolve(res.rows[0].rowid);
+                    }
+                )
+            })
+        };
+    
+        function readdb() {
+            console.log("in select db func "+username);
+            var devicefilter = "";
+            var projectfilter = "";
+            if (request.body.certFilter) {
+                certfilter = request.body.certFilter.toUpperCase();
+            }
+            if (request.body.projectFilter) {
+                projectfilter = request.body.projectFilter.toUpperCase();
+            }
+            console.log("request query set to : "+request.query);
+    
+            console.log("first query vars : "+devicefilter+" : "+request.query.devicefilter);
+    
+            squery = 'SELECT * from users';
+    
+            console.log("squery : "+squery);
+            return new Promise(function (resolve, reject) {
+                pool.query(squery, (err, res) => {
+                        kev = 2;
+                        if (err) return next(err);
+                        console.log(res.rows);
+                        console.log("second request query set to : "+request.query.devicefilter);
+                        if (request.query && request.query.offset) {
+                            offset = parseInt(request.query.offset, 10);
+                        }
+    
+                        if (request.query && request.query.count) {
+                            count = parseInt(request.query.count, 10);
+                        }
+    
+                        console.log("res rows : "+res.rows);
+                        // res.rows[0].rowcount = "test";
+                        page_cnt=Math.ceil(res.rows.length/count);
+                        console.log('render test after promise '+res.rows.length);
+                        recordDetails = {totalRecords: res.rows.length,recPerPage: count,pageCount: Math.ceil(res.rows.length/count),currentPage: offset,pagerStart: pagerStart};
+                        console.log(recordDetails);
+                        response
+                            .render('list_users', { data: res.rows.slice(offset,offset+count), recordDetails: recordDetails, title: 'Cert Database' ,uname: username, accessLvl: accessLvl,devicefilter: devicefilter,projectfilter: projectfilter});
+    
+                        // resolve(res.rows[0].rowid);
+                    }
+                )
+            })
+        };
+        console.log("*********** request : "+request.body.deviceFilter);
+        console.log("call db func");
+        kev = "";
+        rowcount=countrec();
+        // console.log("row count"+rowcount);
+        readdb().then((rowid) => {
+            console.log(rowid)//Value here is defined as u expect.
+        });
+        console.log("after db func");
+    };
+
 module.exports.add = function (request, response, next) {
     console.log("user add...");
     const id = request.params.certId;
