@@ -57,19 +57,21 @@ module.exports.listall = function (request, response, next) {
     
         function readdb() {
             console.log("in select db func "+username);
-            var devicefilter = "";
-            var projectfilter = "";
-            if (request.body.certFilter) {
-                certfilter = request.body.certFilter.toUpperCase();
+            var namefilter = "";
+            var emailfilter = "";
+            if (request.body.nameFilter) {
+                namefilter = request.body.nameFilter;
             }
-            if (request.body.projectFilter) {
-                projectfilter = request.body.projectFilter.toUpperCase();
+            if (request.body.emailFilter) {
+                emailfilter = request.body.emailFilter;
             }
-            console.log("request query set to : "+request.query);
+            // console.log("request query set to : "+request.query);
     
-            console.log("first query vars : "+devicefilter+" : "+request.query.devicefilter);
+            // console.log("first query vars : "+devicefilter+" : "+request.query.devicefilter);
     
-            squery = 'SELECT * from users';
+            squery = 'SELECT * from users \
+            where UPPER(name) like \'%'+namefilter+'%\' \
+            and UPPER(email) like \'%'+emailfilter+'%\'';
     
             console.log("squery : "+squery);
             return new Promise(function (resolve, reject) {
@@ -77,7 +79,7 @@ module.exports.listall = function (request, response, next) {
                         kev = 2;
                         if (err) return next(err);
                         console.log(res.rows);
-                        console.log("second request query set to : "+request.query.devicefilter);
+                        // console.log("second request query set to : "+request.query.devicefilter);
                         if (request.query && request.query.offset) {
                             offset = parseInt(request.query.offset, 10);
                         }
@@ -93,7 +95,7 @@ module.exports.listall = function (request, response, next) {
                         recordDetails = {totalRecords: res.rows.length,recPerPage: count,pageCount: Math.ceil(res.rows.length/count),currentPage: offset,pagerStart: pagerStart};
                         console.log(recordDetails);
                         response
-                            .render('list_users', { data: res.rows.slice(offset,offset+count), recordDetails: recordDetails, title: 'Cert Database' ,uname: username, accessLvl: accessLvl,devicefilter: devicefilter,projectfilter: projectfilter});
+                            .render('list_users', { data: res.rows.slice(offset,offset+count), recordDetails: recordDetails, title: 'Cert Database' ,uname: username, accessLvl: accessLvl,namefilter: namefilter,emailfilter: emailfilter});
     
                         // resolve(res.rows[0].rowid);
                     }

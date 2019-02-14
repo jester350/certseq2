@@ -63,7 +63,7 @@ txt += "The node value: " + x.nodeValue + "<br>";
 </script>
 
 <div class="container jf-form">
-<form data-licenseKey="" name="jqueryform-4d4fe5" id="filterprojects" action='/projects' method='post' enctype='multipart/form-data' novalidate autocomplete="on">
+<form data-licenseKey="" name="jqueryform-4d4fe5" id="filterusers" action='/user' method='post' enctype='multipart/form-data' novalidate autocomplete="on">
 <input type="hidden" name="method" value="validateForm">
 <input type="hidden" id="serverValidationFields" name="serverValidationFields" value="">
 
@@ -76,17 +76,13 @@ txt += "The node value: " + x.nodeValue + "<br>";
         <table class ="table">
 <thead>
             <tr>
-                <th>User Name</th>
-                <th>Access level</th>
-                <th>Contact Email</th>
+                <th>User Name</th><th>Access level</th><th>Contact Email</th>
             </tr>
         </thead>
         <thead>
-
-
             <tr>
                 <th>
-                    <input type="text" name="projectfilter" value="{{projectfilter}}">
+                    <input type="text" name="namefilter" value="{{namefilter}}">
                 </th>
                 <th></th>
                 <th>
