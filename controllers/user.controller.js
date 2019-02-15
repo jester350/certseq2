@@ -126,10 +126,34 @@ module.exports.add = function (request, response, next) {
     //            .render('test', { title: ': Admin'});
 };
 
-module.exports.postUser = function (request, response, next) {
+module.exports.postUserseq = function (request, response, next) {
     console.log("post user : "+request);
     const id = request.params.certId;
     User.create({ username: request.body.username,email: request.body.email,password: request.body.password,accessLvl: request.body.accessLvl }).then(function() {
         response.redirect('/');
       });
+};
+
+module.exports.postUser = function (request, response, next) {
+    die
+    console.log("post user : "+request.body);
+    username = request.body.username
+    useremail = request.body.useremail
+    useraccess = request.body.useraccess
+    console.log("###################################################")
+    console.log(projectname)
+    console.log(projectuser)
+    console.log("###################################################")
+
+    return new Promise(function (resolve, reject) {
+        pool.query('INSERT INTO projects("name", "userId") VALUES($1, $2)',
+            [projectname, projectuser],
+            (err, res) => {
+                if (err) return next(err);
+                resolve(projectname);
+                response.redirect('/projects');
+            }
+        )
+    })
+
 };

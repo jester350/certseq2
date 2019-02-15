@@ -81,7 +81,7 @@ console.log(response.body);
         AND UPPER(project.name) like \'%'+projectfilter.toUpperCase()+'%\' \
         and UPPER("devices"."name") like \'%'+devicefilter.toUpperCase()+'%\' \
         and UPPER("devices->certs"."name") like \'%'+certfilter.toUpperCase()+'%\' \
-        order by "devicesCertsExpirydate";'
+        order by "devicesCertsExpirydate","devicesCertsName" ;'
 
         console.log("squery : "+squery);
         return new Promise(function (resolve, reject) {

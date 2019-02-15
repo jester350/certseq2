@@ -118,7 +118,29 @@ txt += "The node value: " + x.nodeValue + "<br>";
             </tr>{{/each}}
         </tbody>
         </table>
-    </div>
+
+        <table class ="table">
+        <thead>
+        <form action="/devices/postDevice" method="post" name="newdevice" id="newdevice" encType="multipart/form-data">
+            <div class="col-sm-16">
+                <tr>
+                    <th>
+                        <input type="text" class="form-control" name="newdevice" # value="">
+                    </th>
+                    <th>
+                        <input type="submit" value="Add New">
+                    </th>
+                </tr>
+            </div>
+        </form>
+        </thead>
+        </table>
+        
+        </div>
+        </div>
+</div>
+
+</div>
 </div>
 </div>
 {{rowcount}}

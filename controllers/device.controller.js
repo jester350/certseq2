@@ -6,8 +6,6 @@ var offset = 0;
 var count = 10;
 var pagerStart=0;
 
-console.log('cert controller');
-
 module.exports.listall = function (request, response, next) {
 console.log("device list all body response");
 console.log(response.body);
@@ -43,15 +41,6 @@ console.log(response.body);
 
         console.log("first query vars : "+devicefilter+" : "+request.query.devicefilter);
 
-        squery = 'SELECT "project"."id", "project"."name", "project"."createdAt", "project"."updatedAt", "project"."userId", "devices"."id" AS "devices.id", "devices"."name" AS "devices.name", "devices"."createdAt" AS "devices.createdAt", "devices"."updatedAt" AS "devices.updatedAt", "devices->project_device"."createdAt" AS "devices.project_device.createdAt", "devices->project_device"."updatedAt" AS "devices.project_device.updatedAt", "devices->project_device"."projectId" AS "devices.project_device.projectId", "devices->project_device"."deviceId" AS "devices.project_device.deviceId", "devices->certs"."id" AS "devices.certs.id", "devices->certs"."name" AS "devices.certs.name", "devices->certs"."start_date" AS "devices.certs.start_date", "devices->certs"."expiry_date" AS "devices.certs.expiry_date", "devices->certs"."cert_file" AS "devices.certs.cert_file", "devices->certs"."revoked" AS "devices.certs.revoked", "devices->certs"."createdAt" AS "devices.certs.createdAt", "devices->certs"."updatedAt" AS "devices.certs.updatedAt", "devices->certs->device_cert"."createdAt" AS "devices.certs.device_cert.createdAt", "devices->certs->device_cert"."updatedAt" AS "devices.certs.device_cert.updatedAt", "devices->certs->device_cert"."certId" AS "devices.certs.device_cert.certId", "devices->certs->device_cert"."deviceId" AS "devices.certs.device_cert.deviceId", "user"."id" AS "user.id", "user"."name" AS "user.name", "user"."createdAt" AS "user.createdAt", "user"."updatedAt" AS "user.updatedAt" FROM "projects" AS "project" LEFT OUTER JOIN ( "project_devices" AS "devices->project_device" INNER JOIN "devices" AS "devices" ON "devices"."id" = "devices->project_device"."deviceId") ON "project"."id" = "devices->project_device"."projectId" LEFT OUTER JOIN ( "device_certs" AS "devices->certs->device_cert" INNER JOIN "certs" AS "devices->certs" ON "devices->certs"."id" = "devices->certs->device_cert"."certId") ON "devices"."id" = "devices->certs->device_cert"."deviceId" LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id";'
-
-        squery = 'SELECT devices.row_id as rowid, devices.name as devicename,projects.name as systemName,users.email as useremail \
-        FROM devices \
-        INNER JOIN device_project_junc ON devices.row_id = device_project_junc.device \
-        inner join projects on projects.row_id = device_project_junc.project \
-        inner join users on users.id = projects.contact \
-        WHERE UPPER(devices.name) like \'%'+devicefilter+'%\' and UPPER(projects.name) like \'%'+projectfilter+'%\' \
-        ORDER BY devices.name ASC';
 
         squery = 'SELECT "devices"."id" AS "devicesId", "devices"."name" AS "devicesName" FROM "devices" AS "devices" ORDER BY devices.name ASC';
 
@@ -89,11 +78,72 @@ console.log(response.body);
     kev = "";
     rowcount=countrec();
     // console.log("row count"+rowcount);
+    
     readdb().then((rowid) => {
         console.log(rowid)//Value here is defined as u expect.
     });
     console.log("after db func");
 };
+
+
+
+
+
+module.exports.listAllDevices = function (request, response, next) {
+    console.log("device screen"); 
+
+    function runsql2 (sqlquery) {
+        return new Promise((resolve, reject) => {
+            pool.query(sqlquery, (err, res) => {
+            if (err) {
+              return reject (err)
+            }
+            resolve(res.rows)
+          })
+        })
+      }
+
+
+    console.log("call sync");
+
+    Promise.all([
+        runsql2('SELECT "devices"."id" AS "devicesId", "devices"."name" AS "devicesName" FROM "tempdevices" AS "devices" ORDER BY devices.name ASC'),
+        runsql2('SELECT id as projectid,name as projectname from projects')
+      ])
+      .then(data => {
+        res=[]
+        projectlist=[]
+        res=data[0]
+        projectlist=data[1]
+        if (request.query && request.query.offset) {
+            offset = parseInt(request.query.offset, 10);
+        }
+    
+        if (request.query && request.query.count) {
+            count = parseInt(request.query.count, 10);
+        }
+    
+        console.log("res rows : "+res.rows);
+        // res.rows[0].rowcount = "test";
+        page_cnt=Math.ceil(res.rows.length/count);
+        console.log('render test after promise '+res.rows.length);
+        recordDetails = {totalRecords: res.rows.length,recPerPage: count,pageCount: Math.ceil(res.rows.length/count),currentPage: offset,pagerStart: pagerStart};
+        console.log(recordDetails);
+        response
+            .render('list_devices', { data: res.rows.slice(offset,offset+count), recordDetails: recordDetails, title: 'Cert Database' ,uname: username, accessLvl: accessLvl,devicefilter: devicefilter,projectfilter: projectfilter});
+    
+        console.log("Second handler", data);
+      })
+      .catch((err) => console.log(err))
+};
+
+
+
+
+
+
+
+
 
 
 
@@ -137,92 +187,54 @@ module.exports.deviceGetOne = function (request, response, next) {
     }
 };
 
-module.exports.deviceAddOne = function (request, response, next) {
-    console.log("Add a device...");
-    const id = request.params.deviceId;
-    if (request.session.user && request.cookies.user_sid) {
-    console.log("user during get device "+username);
-    pool.query('SELECT row_id as projectid, name as projectname from projects', (err, res) => {
-        if (err) return next(err);
-        console.log(res.rows);
-    projects=res.rows;
-    })
-    squery = 'SELECT devices.row_id as rowid, devices.name as devicename,projects.name as projectname,users.email as useremail \
-    FROM devices \
-    INNER JOIN device_project_junc ON devices.row_id = device_project_junc.device \
-    inner join projects on projects.row_id = device_project_junc.project \
-    inner join users on users.id = projects.contact \
-    WHERE devices.row_id = $1';
+module.exports.postDevicex = function (request, response, next) {
+    console.log("post device : "+request.body.newdevice);
+    devicename = request.body.newdevice
+    console.log("###################################################")
 
-    pool.query('SELECT devices.row_id as rowid, devices.name as devicename,projects.name as projectname,users.email as useremail \
-    FROM devices \
-    INNER JOIN device_project_junc ON devices.row_id = device_project_junc.device \
-    inner join projects on projects.row_id = device_project_junc.project \
-    inner join users on users.id = projects.contact \
-    WHERE devices.row_id = $1', [id], (err, res) => {
-            // pool.query('SELECT * FROM cert where row_id = $1', [id], (err, res) => {
-            if (err) return next(err);
-            console.log(res.rows[0]);
-            var devicename = "";
-            var projectname = "";
-            var contact = "";
-            if (res.rows[0]) {
-            var devicename = res.rows[0].devicename;
-            var today = new Date();
-            var projectname = res.rows[0].projectname;
-            var contact = res.rows[0].useremail;
-            };
-            // console.log("project : "+projects[1].projectname);
-            response
-                .render('getDevice', { data: res.rows, projects: projects, title: 'Device : '+devicename, devicename: devicename,project: projectname, contact: contact,deviceid: id });
-        })
-    } else {
-        console.log("exit 2");
-        response.redirect('/login');
-    }
+    console.log("###################################################")
+
+    return new Promise(function (resolve, reject) {
+        pool.query('INSERT INTO devices("name") VALUES($1)',
+            [devicename],
+            (err, res) => {
+                if (err) return next(err);
+                resolve(devicename);
+                response.redirect('/devices');
+            }
+        )
+    })
+
 };
 
-
-
-module.exports.certPost_upload_working = function(req,res,next){
-    console.log("upload section");
-    function insertcert(body) {
-        console.log("upload : "+body);
-    }
-   
-    // console.log('FIRST TEST: ' + JSON.stringify(req.files));
-    console.log('second TEST: ' +req.files.theFile.name);
-    next();
-  };
-
-
-module.exports.devicePost = function (request, response, next) {
-    var list_projects="";
-    console.log("insert device");
+module.exports.postDevice = function (request, response, next) {
+    
     function insertdevice(body) {
-        console.log("********************* insert device command");
+        console.log("insert command");
         console.log(body);
-        console.log("************************* body");
+        console.log("body");
         var today = new Date();
-        const { deviceid, devicename } = body;
-        list_projects = body.project;
-        console.log(devicename);
-        console.log(list_projects);
+        projectid = body.deviceproject;
+        const { name, commonname, changeref, certtype, start_date, expiry_date, leadtime } = body;
+        for (var i in projectid) {
+            console.log(projectid[i]);
+        }
         return new Promise(function (resolve, reject) {
             pool.query('INSERT INTO devices(name) VALUES($1)',
-                [devicename],
+                [name],
                 (err, res) => {
                     if (err) return next(err);
-                    resolve(list_projects);
+                    resolve(name);
                     // response.redirect('/certs');
                 }
             )
         })
     };
+
     function getmax() {
         console.log("get max");
         return new Promise(function (resolve, reject) {
-            pool.query('select max(row_id) as max from devices', (err, res) => {
+            pool.query('select max(id) as max from certs', (err, res) => {
                 if (err) return next(err);
                 max = res.rows.max;
                 resolve(res.rows.max);
@@ -231,59 +243,39 @@ module.exports.devicePost = function (request, response, next) {
             )
         })
     };
-    insertdevice(request.body).then((project) => {
-        console.log("insert device junc table");
-        console.log(project);
-        pool.query('select max(row_id) from devices', (err, res) => {
+
+    insertcert(request.body).then((certdevice) => {
+        console.log("junction body");
+        console.log(request.body);
+        var tmparry=[];
+        var adddevice=[];
+        var adddevice = tmparry.concat(request.body.certdevice);
+        console.log("devices")
+        console.log(adddevice);
+        pool.query('select max(id) from certs', (err, res) => {
             if (err) return next(err);
-            for (var projectid in list_projects) {
-                console.log("add device and project to junc")
-                console.log(list_projects[projectid])
-            pool.query('INSERT INTO device_project_junc(device,project) VALUES($1, $2)',
-                [res.rows[0].max, list_projects[projectid]],
-                (err, res) => {
+            // console.log("max::");
+            console.log("max row : "+res.rows[0].max);
+            // console.log("done max 2" + system + ":" + res.rows[0].max)//Value here is defined as u expect.
+            console.log("list devices") 
+            // for (var entry in device) {
+            // device.forEach(function(entry) {
+            var index;
+            for (index = 0; index < adddevice.length; ++index) {
+                console.log(index+"device : "+adddevice[index])
+                pool.query('INSERT INTO device_certs("certId","deviceId") VALUES($1, $2)',
+                    [res.rows[0].max, adddevice[index]],
+                    (err, res) => {
                     if (err) return next(err);
-                })}
+                });
+            };
         })
-        pool.query('select max(row_id) from devices', (err, res) => {
+
+        pool.query('select max(id) from certs', (err, res) => {
             if (err) return next(err);
             response.redirect('/certs');
         })
     });
     // response.redirect('/certs');
-};
-
-
-
-module.exports.certUpdatetest = function (req, res, next) {
-    // let certFile = req.files.theFile;
-    console.log("lefts do this");
-    console.log(req.body);
-};
-
-
-
-module.exports.deviceUpdate = function (request, response, next) {
-    var certFileName="";
-    let certFile = request.files.newcertfile;
-    console.log("check for a new file "+request.files.newcertfile);
-
-    console.log("insert command");
-    console.log(request.body);
-    console.log(request.files);
-    
-    console.log("body");
-    var today = new Date();
-    const { certid,name, created_date, expiry_date, start_date, systems, } = request.body;
-
-
-    return new Promise(function (resolve, reject) {
-    console.log("lets do an update ");
-    console.log("file name : "+usethisfilename);
-        pool.query('UPDATE cert SET name = $2, created_date = $3, expiry_date = $4, start_date = $5, cert_file = $6 where row_id = $1',[certid,name, created_date, expiry_date, start_date, usethisfilename],(err, res) => {
-        if (err) return next(err);
-        console.log("insert : "+res);
-        response.redirect('/certs');
-    })});
 };
 
