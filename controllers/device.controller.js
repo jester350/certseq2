@@ -105,15 +105,16 @@ module.exports.listAllDevices = function (request, response, next) {
 
 
     console.log("call sync");
-
+    devicefilter=""
+    projectfilter=""
     Promise.all([
-        runsql2('SELECT "devices"."id" AS "devicesId", "devices"."name" AS "devicesName" FROM "tempdevices" AS "devices" ORDER BY devices.name ASC'),
+        runsql2('SELECT "devices"."id" AS "devicesId", "devices"."name" AS "devicesName" FROM "devices" AS "devices" ORDER BY devices.name ASC'),
         runsql2('SELECT id as projectid,name as projectname from projects')
       ])
       .then(data => {
-        res=[]
+        devicelist=[]
         projectlist=[]
-        res=data[0]
+        devicelist=data[0]
         projectlist=data[1]
         if (request.query && request.query.offset) {
             offset = parseInt(request.query.offset, 10);
@@ -123,14 +124,15 @@ module.exports.listAllDevices = function (request, response, next) {
             count = parseInt(request.query.count, 10);
         }
     
-        console.log("res rows : "+res.rows);
+        console.log("devices : "+devicelist);
+        console.log("projects : "+projectlist)
         // res.rows[0].rowcount = "test";
-        page_cnt=Math.ceil(res.rows.length/count);
-        console.log('render test after promise '+res.rows.length);
-        recordDetails = {totalRecords: res.rows.length,recPerPage: count,pageCount: Math.ceil(res.rows.length/count),currentPage: offset,pagerStart: pagerStart};
+        page_cnt=Math.ceil(devicelist.length/count);
+        console.log('render test after promise ');
+        recordDetails = {totalRecords: devicelist.length,recPerPage: count,pageCount: Math.ceil(devicelist.length/count),currentPage: offset,pagerStart: pagerStart};
         console.log(recordDetails);
         response
-            .render('list_devices', { data: res.rows.slice(offset,offset+count), recordDetails: recordDetails, title: 'Cert Database' ,uname: username, accessLvl: accessLvl,devicefilter: devicefilter,projectfilter: projectfilter});
+            .render('list_devices', { data: devicelist.slice(offset,offset+count), recordDetails: recordDetails, title: 'Cert Database' ,uname: username, accessLvl: accessLvl,devicefilter: devicefilter,projectfilter: projectfilter});
     
         console.log("Second handler", data);
       })

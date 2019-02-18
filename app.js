@@ -259,16 +259,16 @@ app.get('/devices/', (req, res,next) => {
     }
 });
 
-app.get('/admin', (req, res,next) => {
-    console.log("admin");
-    if (req.session.user && req.cookies.user_sid) {
-        if (accessLvl == 1) {
+app.get('/user', (req, res,next) => {
+    console.log("user admin");
+    //if (req.session.user && req.cookies.user_sid) {
+    //    if (accessLvl == 1) {
             // res.sendFile(__dirname + '/public/pages/signup.html');
-            app.use('/admin',usersRouter);
-        next();
-    } else {
-        res.redirect('/login');
-    }}
+            app.use('/users',usersRouter);
+    //    next();
+    //} else {
+    //    res.redirect('/login');
+    //}}
 });
 
 app.get('/projects', (req, res,next) => {

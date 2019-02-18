@@ -73,6 +73,7 @@ txt += "The node value: " + x.nodeValue + "<br>";
                 <th>Project</th>
                 <th>Start Date</th>
                 <th>Expiry Date</th>
+                <th>Lead Time</th>
                 <th>Days till Expiry</th>
             </tr>
         </thead>
@@ -88,7 +89,7 @@ txt += "The node value: " + x.nodeValue + "<br>";
                 </th>
                 <th>
                     <input type="text" name="projectFilter" value="{{projectfilter}}">
-                    <input type="submit" value="Sendit"></th>
+                    <input type="submit" value="Filter"></th>
             </tr>
         </form>
         </thead>
@@ -96,19 +97,17 @@ txt += "The node value: " + x.nodeValue + "<br>";
             {{#each data}}
             <tr class="{{classtype}}">
                 <td><a id = "certname"  href="/certs/record{{devicesCertsId}}">{{devicesCertsName}}</a></td>
-                <td>{{{devicesName}}}</td>
-                <td>{{name}}</td>
+                <td><a id = "devicename"  href="/devices/record{{devicesId}}">{{devicesName}}</a></td>
+                <td><a id = "projectname"  href="/projects/record{{id}}">{{name}}</a></td>
                 <td>{{{devicesCertsStartDate}}}</td>
                 <td>{{{devicesCertsExpirydate}}}</td>
+                <td>{{{CertLeadTime}}}</td>
                 <td>{{{daysleft}}}</td>
                 {{!-- TODO: search employee name --}}
             </tr>
             {{else}}
             <tr>
                 <td>No&nbsp;Data&nbsp;Available</td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>

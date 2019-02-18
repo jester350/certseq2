@@ -81,6 +81,7 @@
                 <th>Device</th>
                 <th>Contact</th>
                 <th>Email</th>
+                <th>Delete</th>
                 </tr>
             </thead>
             <tbody id="projects" class="collection with-header">
@@ -90,6 +91,7 @@
                     <td>{{devicesName}}</td>
                     <td>{{certuserName}}</td>
                     <td>{{certuserEmail}}</td>
+                    <td><input type="checkbox" name="removecert_proj{{{id}}}_dev{{{devicesId}}}" value=""><br></td>
                 </tr>
             {{/each}}
             </tbody>
