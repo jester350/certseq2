@@ -38,10 +38,17 @@
     <label for="leadtime">Lead Time</label>
     <input type="number" name="leadtime" id="leadtime"><br>
 
+    <div class="form-group certproj " data-fid="certproj">
+      <label class="control-label" for="certproj">Project</label>
+      <select id="certproj" name="certproj">
+        {{#each projects}}
+          <option value="{{projectid}}">{{projectname}}</option>
+        {{/each}}
+      </select>
+    </div>
+
 <div class="form-group certdevice " data-fid="certdevice">
   <label class="control-label" for="certdevice">Device</label>
-
-
 <select class="form-control" id="certdevice" name="certdevice" multiple="multiple">
       {{#each devices}}
         <option value="{{deviceid}}">{{devicename}}</option>

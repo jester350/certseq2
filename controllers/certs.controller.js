@@ -269,9 +269,10 @@ module.exports.certAddOne = function (request, response, next) {
     console.log("call sync");
     Promise.all([
         runsql2('SELECT id as deviceid, name as devicename from devices'),
-        runsql2('SELECT id as Id,email as userEmail from users')
+        runsql2('SELECT id as Id,email as userEmail from users'),
+        runsql2('SELECT id as projectid, name as projectname from projects')
       ])
-      .then((result) => response.render('addCert', { devices: result[0],userlist:result[1], title: 'Add Cert' }))
+      .then((result) => response.render('addCert', { devices: result[0],userlist:result[1], projects:result[2], title: 'Add Cert' }))
       .catch((err) => console.log(err))
 };
 
@@ -382,7 +383,7 @@ module.exports.certUpdatetest = function (req, res, next) {
 
 
 module.exports.certUpdate = function (request, response, next) {
-    var certFileName="";
+    var certFileName= "";
     let certFile = request.files.newcertfile;
     console.log("check for a new file "+request.files.newcertfile);
     if (certFile) {console.log("file upload details : "+certFile.name)
