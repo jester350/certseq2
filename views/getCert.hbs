@@ -31,7 +31,7 @@
         <div class="form-group row">
             <label for="certtype" class="col-sm-1 col-form-label mb-2 mr-sm-2">Cert Type</label>
             <div class="col-sm-2">
-                <input type="text" name="certtype" id="certtype" class="form-control mb-2 mr-sm-2" size=5px value="{{{certtype}}}">
+                <input type="text" name="certtype" id="certtype" class="form-control mb-2 mr-sm-2" size=5px value="{{{certtypename}}}">
             </div>
         </div>
 
@@ -78,17 +78,13 @@
             <thead class ="thead-dark">
                 <tr>
                 <th>Device</th>
-                <th>Contact</th>
-                <th>Email</th>
                 <th>Delete</th>
                 </tr>
             </thead>
             <tbody id="projects" class="collection with-header">
-            {{#each data}}
+            {{#each certdevices}}
                 <tr class="{{classtype}}">
-                    <td>{{devicesName}}</td>
-                    <td>{{certuserName}}</td>
-                    <td>{{certuserEmail}}</td>
+                    <td>{{deviceName}}</td>
                     <td><input type="checkbox" name="removecert_cert{{{devicesCertsId}}}_dev{{{devicesId}}}" value="delete"></td>
                 </tr>
             {{/each}}

@@ -92,6 +92,13 @@ console.log(response.body);
             INNER JOIN "devices" AS "devices" ON "devices"."id" = "devices->project_device"."deviceId") ON "project"."id" = "devices->project_device"."projectId" \
             order by "certs"."name"'
 
+            squery = 'select "certs"."id" as "CertID","certs"."name" as "cert name", "certs"."start_date" as "Cert Start Date","certs"."expiry_date" as "Cert Expirty Date","certs"."cert_file" as "File","certs"."revoked" as "Revoked","certs"."changeRef" as "Change Ref","certs"."start_date" as "Cert Start Date","certs"."commonName" as "Common Name","certs"."leadTime" as "Lead Time","certs"."type" as "Cert Type","certs"."revokedDate" as "Revoked Date", \
+            "project"."name" as "project name", "project"."id" as "project id","user"."email" as "user email" \
+            from "certs" \
+            inner join "projects" as "project" on "project"."id" = "certs"."project" \
+            LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
+            order by "certs"."name"'
+
         console.log("squery : "+squery);
         return new Promise(function (resolve, reject) {
             pool.query(squery, (err, res) => {
@@ -184,9 +191,11 @@ module.exports.certsGetOne = function (request, response, next) {
     get_cert_type_list = 'SELECT id as certTypeId, name as certTypeName from cert_types';
 
     get_all_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
-    "project"."name" as "projectname","user"."name" as "userName","user"."email" as "userEmail" \
+    "project"."name" as "projectname","user"."name" as "userName","user"."email" as "userEmail", \
+    "certtype"."name" as "certtypename" \
     from "certs" \
     inner join "projects" as "project" on "project"."id" = "certs"."project" \
+    inner join "cert_types" as "certtype" on "certtype"."id" = "certs"."type" \
     LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
     WHERE "certs"."id" = '+find_cert_id
 
@@ -198,7 +207,7 @@ module.exports.certsGetOne = function (request, response, next) {
     INNER JOIN "devices" AS "devices" ON "devices"."id" = "devices->project_device"."deviceId") ON "project"."id" = "devices->project_device"."projectId" \
     WHERE "certs"."id" = '+find_cert_id
 
-
+console.log(get_all_squery);
 
     Promise.all([
         runsql2(get_project_list),
@@ -233,6 +242,7 @@ module.exports.certsGetOne = function (request, response, next) {
         var certtype = certDetails[0].certTypeId;
         var certRevoked = certDetails[0].certRevoked; 
         var projectname = certDetails[0].projectname;
+        var certtypename = certDetails[0].certtypename
         revokedVis="hidden";
         if (certDetails[0].certRevoked) {
             var certRevokedDate = date.format(certDetails[0].certRevokedDate, 'YYYY-MM-DD');
@@ -245,7 +255,7 @@ module.exports.certsGetOne = function (request, response, next) {
         // console.log(res.rows)
         console.log("render one cert")
         response
-            .render('getCert', { data: certDetails, certtype: certtype, projectname: projectname, projects: projects,revokedVis: revokedVis,devices: devices, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact,certuserEmail: certuserEmail, sdate: sdate, edate: edate, projectname: projectname, dleft: daysLeft,certfile: certfile,certid: find_cert_id,accessLvl: accessLvl });
+            .render('getCert', { data: certDetails, certdevices: certdevices, certtype: certtype,certtypename: certtypename, projectname: projectname, projects: projects,revokedVis: revokedVis,devices: devices, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact,certuserEmail: certuserEmail, sdate: sdate, edate: edate, projectname: projectname, dleft: daysLeft,certfile: certfile,certid: find_cert_id,accessLvl: accessLvl });
     
         console.log("Second handler", data);
       })
