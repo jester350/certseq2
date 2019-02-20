@@ -96,9 +96,9 @@ txt += "The node value: " + x.nodeValue + "<br>";
         <tbody id="names" class="collection with-header">
             {{#each data}}
             <tr class="{{classtype}}">
-                <td><a id = "certname"  href="/certs/record{{devicesCertsId}}">{{devicesCertsName}}</a></td>
+                <td><a id = "certname"  href="/certs/record{{CertID}}">{{'cert name'}}</a></td>
                 <td><a id = "devicename"  href="/devices/record{{devicesId}}">{{devicesName}}</a></td>
-                <td><a id = "projectname"  href="/projects/record{{id}}">{{name}}</a></td>
+                <td><a id = "projectname"  href="/projects/record{{'project id'}}">{{'project name'}}</a></td>
                 <td>{{{devicesCertsStartDate}}}</td>
                 <td>{{{devicesCertsExpirydate}}}</td>
                 <td>{{{CertLeadTime}}}</td>

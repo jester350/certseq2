@@ -160,96 +160,79 @@ console.log(response.body);
 
 module.exports.certsGetOne = function (request, response, next) {
     console.log("running get single cert...");
-    const find_cert_id = request.params.certId;
+    const id = request.params.certId;
     // if (request.session.user && request.cookies.user_sid) {
-
-    function runsql2 (sqlquery) {
-        return new Promise((resolve, reject) => {
-            pool.query(sqlquery, (err, res) => {
-            if (err) {
-                return reject (err)
-            }
-            resolve(res.rows)
-            })
-        })
-    }
-
+    if (1 == 1) {
     console.log("user during get cert "+username);
     
-    get_project_list = 'SELECT id as projectid, name as projectname from projects';
-
-
-    get_device_list = 'SELECT id as deviceid, name as devicename from devices';
+    pool.query('SELECT id as projectid, name as projectname from projects', (err, res) => {
+        if (err) return next(err);
+        console.log(res.rows);
+    projects=res.rows;
+    })
     
-    get_cert_type_list = 'SELECT id as certTypeId, name as certTypeName from cert_types';
+    pool.query('SELECT id as deviceid, name as devicename from devices', (err, res) => {
+        if (err) return next(err);
+        console.log(res.rows);
+    devices=res.rows;
+    })
 
-    get_all_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
+    pool.query('SELECT id as certTypeId, name as certTypeName from cert_types', (err, res) => {
+        if (err) return next(err);
+        console.log(res.rows);
+    certtypes=res.rows;
+    })
+
+    squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
     "project"."name" as "projectname","user"."name" as "userName","user"."email" as "userEmail" \
     from "certs" \
     inner join "projects" as "project" on "project"."id" = "certs"."project" \
     LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
-    WHERE "certs"."id" = '+find_cert_id
+    WHERE "certs"."id" = $1'
 
-    get_devices_squery = 'select "devices"."id" as "deviceId","devices"."name" as "deviceName" \
+    squery1 = 'select "devices"."id" as "deviceId","devices"."name" as "deviceName" \
     from "certs" \
     inner join "projects" as "project" on "project"."id" = "certs"."project" \
     LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
     LEFT OUTER JOIN ( "project_devices" AS "devices->project_device" \
     INNER JOIN "devices" AS "devices" ON "devices"."id" = "devices->project_device"."deviceId") ON "project"."id" = "devices->project_device"."projectId" \
-    WHERE "certs"."id" = '+find_cert_id
+    WHERE "certs"."id" = $1'
 
-
-
-    Promise.all([
-        runsql2(get_project_list),
-        runsql2(get_device_list),
-        runsql2(get_cert_type_list),
-        runsql2(get_all_squery),
-        runsql2(get_devices_squery)
-      ])
-      .then(data => {
-        projects=[]
-        devices=[]
-        certtypes=[]
-        certdevices=[]
-        certdetails=[]
-        proects=data[0]
-        devices=data[1]
-        certtypes=data[2]
-        certDetails=data[3]
-        certdevices=data[4]
-        var certname = certDetails[0].certName;
-        var today = new Date();
-        var projectname = certDetails[0].projectname;
-        //var devicename = res.rows[0].devicesName;
-        var sdate = date.format(certDetails[0].certStartDate, 'YYYY-MM-DD');
-        var edate = date.format(certDetails[0].certExpiryDate, 'YYYY-MM-DD');
-        var daysLeft = date.subtract(certDetails[0].certExpiryDate, today).toDays();
-        var contact = certDetails[0].userName
-        var certuserEmail = certDetails[0].userEmail
-        var changeref = certDetails[0].certChangeRef;
-        var commonName = certDetails[0].certCommonName;
-        var leadTime = certDetails[0].certLeadTime;
-        var certtype = certDetails[0].certTypeId;
-        var certRevoked = certDetails[0].certRevoked; 
-        var projectname = certDetails[0].projectname;
-        revokedVis="hidden";
-        if (certDetails[0].certRevoked) {
-            var certRevokedDate = date.format(certDetails[0].certRevokedDate, 'YYYY-MM-DD');
-            certRevoked = "checked"
-            revokedVis = "visible"
-        };
-        // var sysname = res.rows[0].systemname;
-        var certfile = certDetails[0].certFile;
-        console.log("project : "+projectname);
-        // console.log(res.rows)
-        console.log("render one cert")
-        response
-            .render('getCert', { data: certDetails, certtype: certtype, projectname: projectname, projects: projects,revokedVis: revokedVis,devices: devices, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact,certuserEmail: certuserEmail, sdate: sdate, edate: edate, projectname: projectname, dleft: daysLeft,certfile: certfile,certid: find_cert_id,accessLvl: accessLvl });
-    
-        console.log("Second handler", data);
-      })
-      .catch((err) => console.log(err))
+    pool.query(squery, [id], (err, res) => {
+            // pool.query('SELECT * FROM cert where row_id = $1', [id], (err, res) => {
+            if (err) return next(err);
+            var certname = res.rows[0].certName;
+            var today = new Date();
+            var projectname = res.rows[0].projectname;
+            var devicename = res.rows[0].devicesName;
+            var sdate = date.format(res.rows[0].certStartDate, 'YYYY-MM-DD');
+            var edate = date.format(res.rows[0].certExpiryDate, 'YYYY-MM-DD');
+            var daysLeft = date.subtract(res.rows[0].certExpiryDate, today).toDays();
+            var contact = res.rows[0].userName
+            var certuserEmail = res.rows[0].userEmail
+            var changeref = res.rows[0].certChangeRef;
+            var commonName = res.rows[0].certCommonName;
+            var leadTime = res.rows[0].certLeadTime;
+            var certtype = res.rows[0].certTypeId;
+            var certRevoked = res.rows[0].certsRevoked; 
+            revokedVis="hidden";
+            if (res.rows[0].certsRevoked) {
+                var certRevokedDate = date.format(res.rows[0].certRevokedDate, 'YYYY-MM-DD');
+                certRevoked = "checked"
+                revokedVis = "visible"
+            };
+            // var sysname = res.rows[0].systemname;
+            var certfile = res.rows[0].certFile;
+            console.log("project : "+projectname);
+            console.log(res.rows)
+            console.log("render one cert")
+            response
+                .render('getCert', { data: res.rows, certtype: certtype, projects: projects,revokedVis: revokedVis,devices: devices, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact,certuserEmail: certuserEmail, sdate: sdate, edate: edate, projectname: projectname, devicename: devicename, dleft: daysLeft,certfile: certfile,certid: id,accessLvl: accessLvl });
+        })
+    } else {
+        console.log("exit 2");
+        response.redirect('/login');
+    }
 };
 
 module.exports.certAddOne = function (request, response, next) {
