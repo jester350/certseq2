@@ -69,7 +69,6 @@ txt += "The node value: " + x.nodeValue + "<br>";
         <thead>
             <tr>
                 <th>Cert&nbsp;Name</th>
-                <th>Device</th>
                 <th>Project</th>
                 <th>Start Date</th>
                 <th>Expiry Date</th>
@@ -85,9 +84,6 @@ txt += "The node value: " + x.nodeValue + "<br>";
                     <input type="text" name="certFilter" value="{{certfilter}}">
                 </th>
                 <th>
-                    <input type="text" name="deviceFilter" value="{{devicefilter}}">
-                </th>
-                <th>
                     <input type="text" name="projectFilter" value="{{projectfilter}}">
                     <input type="submit" value="Filter"></th>
             </tr>
@@ -96,13 +92,12 @@ txt += "The node value: " + x.nodeValue + "<br>";
         <tbody id="names" class="collection with-header">
             {{#each data}}
             <tr class="{{classtype}}">
-                <td><a id = "certname"  href="/certs/record{{CertID}}">{{'cert name'}}</a></td>
-                <td><a id = "devicename"  href="/devices/record{{devicesId}}">{{devicesName}}</a></td>
-                <td><a id = "projectname"  href="/projects/record{{'project id'}}">{{'project name'}}</a></td>
-                <td>{{{devicesCertsStartDate}}}</td>
-                <td>{{{devicesCertsExpirydate}}}</td>
-                <td>{{{CertLeadTime}}}</td>
-                <td>{{{daysleft}}}</td>
+                <td><a id = "certname"  href="/certs/record{{certId}}">{{certName}}</a></td>
+                <td><a id = "projectname"  href="/projects/record{{projectId}}">{{projectName}}</a></td>
+                <td>{{{certStartDate}}}</td>
+                <td>{{{certExpiryDate}}}</td>
+                <td>{{{certLeadTime}}}</td>
+                <td>{{{daysLeft}}}</td>
                 {{!-- TODO: search employee name --}}
             </tr>
             {{else}}

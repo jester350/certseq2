@@ -92,12 +92,14 @@ console.log(response.body);
             INNER JOIN "devices" AS "devices" ON "devices"."id" = "devices->project_device"."deviceId") ON "project"."id" = "devices->project_device"."projectId" \
             order by "certs"."name"'
 
-            squery = 'select "certs"."id" as "CertID","certs"."name" as "cert name", "certs"."start_date" as "Cert Start Date","certs"."expiry_date" as "Cert Expirty Date","certs"."cert_file" as "File","certs"."revoked" as "Revoked","certs"."changeRef" as "Change Ref","certs"."start_date" as "Cert Start Date","certs"."commonName" as "Common Name","certs"."leadTime" as "Lead Time","certs"."type" as "Cert Type","certs"."revokedDate" as "Revoked Date", \
-            "project"."name" as "project name", "project"."id" as "project id","user"."email" as "user email" \
+            squery = 'select "certs"."id" as "certId","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."changeRef" as "certChangeRef","certs"."start_date" as "certStartDate","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certType","certs"."revokedDate" as "certRevokedDate", \
+            "project"."name" as "projectName", "project"."id" as "projectId","user"."email" as "userEmail" \
             from "certs" \
             inner join "projects" as "project" on "project"."id" = "certs"."project" \
             LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
-            order by "certs"."name"'
+            AND UPPER("project"."name") like \'%'+projectfilter.toUpperCase()+'%\' \
+            and UPPER("certs"."name") like \'%'+certfilter.toUpperCase()+'%\' \
+            order by "certs"."expiry_date","certs"."name"'
 
         console.log("squery : "+squery);
         return new Promise(function (resolve, reject) {
@@ -116,10 +118,10 @@ console.log(response.body);
                     for (var i in res.rows) {
                         console.log(res.rows[i])
                         console.log("device id : "+res.rows[i].devicesId)
-                        if (res.rows[i].devicesId == null) {console.log("NULL!!!")};
-                        if (res.rows[i].devicesId != null) {
-                            var daysLeft = date.subtract(res.rows[i].devicesCertsExpirydate, today).toDays();
-                            res.rows[i].daysleft = daysLeft;
+                        //if (res.rows[i].devicesId == null) {console.log("NULL!!!")};
+                        //if (res.rows[i].devicesId != null) {
+                            var daysLeft = date.subtract(res.rows[i].certExpiryDate, today).toDays();
+                            res.rows[i].daysLeft = daysLeft;
                             var class_type = "alert alert-success";
                             if (daysLeft < 30) {
                                 class_type = "alert alert-warning";
@@ -128,13 +130,13 @@ console.log(response.body);
                                 class_type = "alert alert-danger";
                             }
                             res.rows[i].classtype=class_type;
-                            sdate = date.format(res.rows[i].devicesCertsStartDate, 'DD-MM-YYYY');
+                            sdate = date.format(res.rows[i].certStartDate, 'DD-MM-YYYY');
                             console.log(sdate)
-                            res.rows[i].devicesCertsStartDate = sdate;
+                            res.rows[i].certStartDate = sdate;
 
-                            edate = date.format(res.rows[i].devicesCertsExpirydate, 'DD-MM-YYYY');
-                            res.rows[i].devicesCertsExpirydate = edate;
-                        }
+                            edate = date.format(res.rows[i].certExpiryDate, 'DD-MM-YYYY');
+                            res.rows[i].certExpiryDate = edate;
+                        //}
                     }
                     console.log("res rows : "+res.rows);
                     // res.rows[0].rowcount = "test";
