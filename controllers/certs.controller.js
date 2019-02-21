@@ -376,7 +376,7 @@ module.exports.certPost = function (request, response, next) {
                     if (err) return next(err);
                 });
                 pool.query('INSERT INTO project_devices("projectId","deviceId") VALUES($1, $2)',
-                    [projectId, adddevice[index]],
+                    [projectId, res.rows[0].max],
                     (err, res) => {
                     if (err) return next(err);
                 });
