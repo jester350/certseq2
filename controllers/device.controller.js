@@ -211,42 +211,6 @@ module.exports.postDevicex = function (request, response, next) {
 
 module.exports.postDevice = function (request, response, next) {
     
-    function insertdevice(body) {
-        console.log("insert command");
-        console.log(body);
-        console.log("body");
-        var today = new Date();
-        projectid = body.deviceproject;
-        const { name, commonname, changeref, certtype, start_date, expiry_date, leadtime } = body;
-        for (var i in projectid) {
-            console.log(projectid[i]);
-        }
-        return new Promise(function (resolve, reject) {
-            pool.query('INSERT INTO devices(name) VALUES($1)',
-                [name],
-                (err, res) => {
-                    if (err) return next(err);
-                    resolve(name);
-                    // response.redirect('/certs');
-                }
-            )
-        })
-    };
-
-    function getmax() {
-        console.log("get max");
-        return new Promise(function (resolve, reject) {
-            pool.query('select max(id) as max from certs', (err, res) => {
-                if (err) return next(err);
-                max = res.rows.max;
-                resolve(res.rows.max);
-                // response.redirect('/certs');
-            }
-            )
-        })
-    };
-
-    insertcert(request.body).then((certdevice) => {
         console.log("junction body");
         console.log(request.body);
         var tmparry=[];
@@ -254,30 +218,10 @@ module.exports.postDevice = function (request, response, next) {
         var adddevice = tmparry.concat(request.body.certdevice);
         console.log("devices")
         console.log(adddevice);
-        pool.query('select max(id) from certs', (err, res) => {
-            if (err) return next(err);
-            // console.log("max::");
-            console.log("max row : "+res.rows[0].max);
-            // console.log("done max 2" + system + ":" + res.rows[0].max)//Value here is defined as u expect.
-            console.log("list devices") 
-            // for (var entry in device) {
-            // device.forEach(function(entry) {
-            var index;
-            for (index = 0; index < adddevice.length; ++index) {
-                console.log(index+"device : "+adddevice[index])
-                pool.query('INSERT INTO device_certs("certId","deviceId") VALUES($1, $2)',
-                    [res.rows[0].max, adddevice[index]],
+        pool.query('INSERT INTO devices(name) VALUES($1)',
+                [request.body.newdevice],
                     (err, res) => {
                     if (err) return next(err);
+                    response.redirect('/devices');
                 });
-            };
-        })
-
-        pool.query('select max(id) from certs', (err, res) => {
-            if (err) return next(err);
-            response.redirect('/certs');
-        })
-    });
-    // response.redirect('/certs');
-};
-
+        };
