@@ -237,7 +237,6 @@ console.log(get_all_squery);
         var edate = date.format(certDetails[0].certExpiryDate, 'YYYY-MM-DD');
         var daysLeft = date.subtract(certDetails[0].certExpiryDate, today).toDays();
         var contact = certDetails[0].userName
-        var certuserEmail = certDetails[0].userEmail
         var changeref = certDetails[0].certChangeRef;
         var commonName = certDetails[0].certCommonName;
         var leadTime = certDetails[0].certLeadTime;
@@ -245,6 +244,7 @@ console.log(get_all_squery);
         var certRevoked = certDetails[0].certRevoked; 
         var projectname = certDetails[0].projectname;
         var certtypename = certDetails[0].certtypename
+        var userEmail = certDetails[0].userEmail
         revokedVis="hidden";
         if (certDetails[0].certRevoked) {
             var certRevokedDate = date.format(certDetails[0].certRevokedDate, 'YYYY-MM-DD');
@@ -257,7 +257,7 @@ console.log(get_all_squery);
         // console.log(res.rows)
         console.log("render one cert")
         response
-            .render('getCert', { data: certDetails, certdevices: certdevices, certtype: certtype,certtypename: certtypename, projectname: projectname, projects: projects,revokedVis: revokedVis,devices: devices, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact,certuserEmail: certuserEmail, sdate: sdate, edate: edate, projectname: projectname, dleft: daysLeft,certfile: certfile,certid: find_cert_id,accessLvl: accessLvl });
+            .render('getCert', { data: certDetails, certdevices: certdevices, userEmail: userEmail, certtype: certtype,certtypename: certtypename, projectname: projectname, projects: projects,revokedVis: revokedVis,devices: devices, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact, sdate: sdate, edate: edate, projectname: projectname, dleft: daysLeft,certfile: certfile,certid: find_cert_id,accessLvl: accessLvl });
     
         console.log("Second handler", data);
       })
@@ -320,14 +320,14 @@ module.exports.certPost = function (request, response, next) {
         console.log("body");
         var today = new Date();
         deviceid = body.certdevice;
-        const { name, commonname, changeref, certtype, start_date, expiry_date, leadtime } = body;
+        const { name, commonname, changeref, certtype, start_date, expiry_date, leadtime, certproj } = body;
         for (var i in deviceid) {
             console.log(deviceid[i]);
         }
         console.log("device : "+name)
         return new Promise(function (resolve, reject) {
-            pool.query('INSERT INTO certs(name,"commonName","changeRef",type, expiry_date,start_date,cert_file,"leadTime") VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
-                [name, commonname, changeref,certtype, expiry_date, start_date,certFileName,leadtime],
+            pool.query('INSERT INTO certs(name,"commonName","changeRef",type, expiry_date,start_date,cert_file,"leadTime","project") VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+                [name, commonname, changeref,certtype, expiry_date, start_date,certFileName,leadtime,certproj],
                 (err, res) => {
                     if (err) return next(err);
                     resolve(name);
@@ -356,6 +356,7 @@ module.exports.certPost = function (request, response, next) {
         var tmparry=[];
         var adddevice=[];
         var adddevice = tmparry.concat(request.body.certdevice);
+        var projectId = request.body.certproj;
         console.log("devices")
         console.log(adddevice);
         pool.query('select max(id) from certs', (err, res) => {
@@ -371,6 +372,11 @@ module.exports.certPost = function (request, response, next) {
                 console.log(index+"device : "+adddevice[index])
                 pool.query('INSERT INTO device_certs("certId","deviceId") VALUES($1, $2)',
                     [res.rows[0].max, adddevice[index]],
+                    (err, res) => {
+                    if (err) return next(err);
+                });
+                pool.query('INSERT INTO project_devices("projectId","deviceId") VALUES($1, $2)',
+                    [projectId, adddevice[index]],
                     (err, res) => {
                     if (err) return next(err);
                 });
