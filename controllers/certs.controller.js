@@ -202,11 +202,24 @@ module.exports.certsGetOne = function (request, response, next) {
     WHERE "certs"."id" = '+find_cert_id
 
     get_devices_squery = 'select "devices"."id" as "deviceId","devices"."name" as "deviceName" \
-    from "certs" \
+    from "devices" \
     inner join "projects" as "project" on "project"."id" = "certs"."project" \
     LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
     LEFT OUTER JOIN ( "project_devices" AS "devices->project_device" \
     INNER JOIN "devices" AS "devices" ON "devices"."id" = "devices->project_device"."deviceId") ON "project"."id" = "devices->project_device"."projectId" \
+    WHERE "certs"."id" = '+find_cert_id
+
+
+    get_devices_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as \ "certRevoked","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
+    "project"."name" as "projectname","user"."name" as "userName","user"."email" as "userEmail", \
+    "certtype"."name" as "certtypename", \
+	"devices"."name" as "deviceName", "devices"."id" as "deviceid" \
+    from "certs" \
+    inner join "projects" as "project" on "project"."id" = "certs"."project" \
+    inner join "cert_types" as "certtype" on "certtype"."id" = "certs"."type" \
+    LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
+	inner join device_certs as junc  on certs.id = junc."certId" \
+	inner join devices  on devices.id = junc."deviceId" \
     WHERE "certs"."id" = '+find_cert_id
 
 console.log(get_all_squery);
