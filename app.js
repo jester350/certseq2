@@ -38,16 +38,6 @@ global.appDir = path.dirname(require.main.filename);
 global.appRoot = path.resolve(__dirname);
 console.log("root "+appRoot);
 
-//var j = schedule.scheduleJob('30 30 1 * * *', function(){
-//    console.log('The answer to life, the universe, and everything!');
-//  });
-
-
-// var mailFromGod = schedule.scheduleJob('30 * * * * *', cron.godmail); // MAIL CRON LINE
-
-// app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
-//app.use('/jquery-ui', express.static(__dirname + '/node_modules/jquery-ui/external/jquery-1.12.1/'));
-
 // view engine setup
 app.set('public', path.join(appRoot, 'public'));
 app.set('views', path.join(__dirname, 'views'));
@@ -154,13 +144,10 @@ var sessionChecker = (req, res, next) => {
     }  
 };
 
-
 // route for Home-Page
 app.get('/', sessionChecker, (req, res) => {
     res.redirect('/login');
 });
-
-// app.use('/', indexRouter);
 
 app.route('/sigxnup')
     .get(sessionChecker, (req, res) => {
@@ -181,7 +168,7 @@ app.route('/sigxnup')
         .catch(error => {
             res.redirect('/4signup');
         });
-    });
+});
 
 app.route('/login')
     .get(sessionChecker, (req, res) => {
@@ -192,12 +179,6 @@ app.route('/login')
             password = req.body.password
             accessLvl = 0;
         console.log("find user");
-
-        //User.findOne({ where: { username: username } }).then(user => {
-        //    console.log("test findone");
-        //    console.log(user.get('username'));
-        //  });
-
         User.findOne({ where: { email: username } }).then(function (user) {
             if (!user) {
                 console.log("user not found");
@@ -217,35 +198,16 @@ app.route('/login')
                 res.redirect('/certs');
             }
         })
-    });
-
-//app.get('/', (req, res) => {
-//    if (req.session.user && req.cookies.user_sid) {
-//        res.sendFile(__dirname + '/certs');
-//    } else {
-//        res.redirect('/login');
-//    }
-//});
-
-// app.use('/users', usersRouter);
-
-app.get('/certs/', (req, res,next) => {
-        username = "a@a.com";
-        accessLvl = "1";
-        console.log("do a cert thing");
-        app.use('/certs',certsRouter);
-        next();
 });
 
-app.get('/certsx/', (req, res,next) => {
+app.get('/certs/', (req, res,next) => {
     if (req.session.user && req.cookies.user_sid) {
-        console.log("do a cert thing");
+        //res.sendFile(__dirname + '/certs');
         app.use('/certs',certsRouter);
-        next();
     } else {
-        console.log("dont do a cert thing");
         res.redirect('/login');
-    }
+    };
+    next();
 });
 
 app.get('/devices/', (req, res,next) => {
@@ -261,14 +223,14 @@ app.get('/devices/', (req, res,next) => {
 
 app.get('/user', (req, res,next) => {
     console.log("user admin");
-    //if (req.session.user && req.cookies.user_sid) {
-    //    if (accessLvl == 1) {
-            // res.sendFile(__dirname + '/public/pages/signup.html');
+    if (req.session.user && req.cookies.user_sid) {
+        if (accessLvl == 1) {
+            res.sendFile(__dirname + '/public/pages/signup.html');
             app.use('/users',usersRouter);
-    //    next();
-    //} else {
-    //    res.redirect('/login');
-    //}}
+        next();
+    } else {
+        res.redirect('/login');
+    }}
 });
 
 app.get('/projects', (req, res,next) => {
@@ -310,16 +272,13 @@ app.get('/logout', (req, res) => {
     }
 });
 
-// app.use('/certs',certsRouter);
-// app.use('/test',testRouter);
-
 //app.use(function(req, res) {
- //   res.send('404: Page not Found', 404);
- //});
+//    res.send('404: Page not Found!', 404);
+//});
  
  // Handle 500
- //app.use(function(error, req, res, next) {
-  //  res.send('500: Internal Server Error', 500);
- //});
+//app.use(function(error, req, res, next) {
+//    res.send('500: Internal Server Error', 500);
+//});
 
 module.exports = app;

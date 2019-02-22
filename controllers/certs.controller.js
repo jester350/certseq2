@@ -7,21 +7,19 @@ var count = 10;
 var pagerStart=0;
 
 module.exports.certsGetAll = function (request, response, next) {
-console.log("body response");
-console.log(response.body);
+    console.log("body response");
+    console.log(response.body);
     function countrec() {
         console.log("in select db func");
         return new Promise(function (resolve, reject) {
             pool.query('SELECT count(*) as rowcount \
-        FROM certs INNER JOIN device_certs ON certs.id = "device_certs"."certId" \
-        inner join devices on devices.id = "device_certs"."deviceId"', (err, res) => {
+                FROM certs INNER JOIN device_certs ON certs.id = "device_certs"."certId" \
+                inner join devices on devices.id = "device_certs"."deviceId"', (err, res) => {
                     kev = 2;
                     if (err) return next(err);
                     console.log(res.rows);
                     console.log('render test after promise');
-                
                 return rowcount;
-
                     // resolve(res.rows[0].rowid);
                 }
             )
@@ -48,51 +46,8 @@ console.log(response.body);
 
         console.log("request query set to : "+request.query);
         console.log("first query vars : "+certfilter+" : "+request.query.certfilter);
-        squery = 'SELECT cert.row_id as rowid, cert.name as certname,cert.start_date as certStartDate,cert.expiry_date as certExpiryDate,d.name as projectName,cert.cert_file as certFile,b.name as devicename \
-        FROM cert \
-        INNER JOIN cert_device_junc ON cert.row_id = cert_device_junc.cert \
-        inner join devices b on b.row_id = cert_device_junc.device \
-        inner join device_project_junc c on c.device = b.row_id \
-        inner join projects d on d.row_id = c.project \
-        ORDER BY certExpiryDate ASC';
-        squery = 'SELECT "project"."id", "project"."name", "project"."createdAt", "project"."updatedAt", "project"."userId", "devices"."id" AS "devices.id", "devices"."name" AS "devices.name", "devices"."createdAt" AS "devices.createdAt", "devices"."updatedAt" AS "devices.updatedAt", \
-        "devices->project_device"."createdAt" AS "devices.project_device.createdAt", "devices->project_device"."updatedAt" AS "devices.project_device.updatedAt", "devices->project_device"."projectId" AS "devices.project_device.projectId", "devices->project_device"."deviceId" AS "devices.project_device.deviceId", \
-        "devices->certs"."id" AS "devices.certs.id", "devices->certs"."name" AS "devices.certs.name", "devices->certs"."start_date" AS "devices.certs.start_date", "devices->certs"."expiry_date" AS "devicesCertsExpirydate", "devices->certs"."cert_file" AS "devices.certs.cert_file", "devices->certs"."revoked" AS "devicesCertsRevoked", "devices->certs"."createdAt" AS "devices.certs.createdAt", "devices->certs"."updatedAt" AS "devices.certs.updatedAt", "devices->certs->device_cert"."createdAt" AS "devices.certs.device_cert.createdAt", "devices->certs->device_cert"."updatedAt" AS "devices.certs.device_cert.updatedAt", "devices->certs->device_cert"."certId" AS "devices.certs.device_cert.certId", "devices->certs->device_cert"."deviceId" AS "devices.certs.device_cert.deviceId", \
-        "user"."id" AS "user.id", "user"."name" AS "user.name", "user"."createdAt" AS "user.createdAt", "user"."updatedAt" AS "user.updatedAt" \
-        FROM "projects" AS "project" \
-        LEFT OUTER JOIN ( "project_devices" AS "devices->project_device" \
-        INNER JOIN "devices" AS "devices" ON "devices"."id" = "devices->project_device"."deviceId") ON "project"."id" = "devices->project_device"."projectId" \
-        LEFT OUTER JOIN ( "device_certs" AS "devices->certs->device_cert" \
-        INNER JOIN "certs" AS "devices->certs" ON "devices->certs"."id" = "devices->certs->device_cert"."certId") ON "devices"."id" = "devices->certs->device_cert"."deviceId" \
-        LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
-        order by "devicesCertsExpirydate";'
 
-        squery = 'SELECT "project"."id", "project"."name", "project"."createdAt", "project"."updatedAt", "project"."userId", "devices"."id" AS "devicesId", "devices"."name" AS "devicesName", "devices"."createdAt" AS "devicesCreatedAt", "devices"."updatedAt" AS "devicesUpdatedAt", \
-        "devices->project_device"."createdAt" AS "devicesProjectDeviceCreatedAt", "devices->project_device"."updatedAt" AS "devicesProjectDevicePpdatedAt", "devices->project_device"."projectId" AS "devicesProjectDeviceProjectId", "devices->project_device"."deviceId" AS "devicesProjectDeviceDeviceId", \
-        "devices->certs"."id" AS "devicesCertsId", "devices->certs"."name" AS "devicesCertsName", "devices->certs"."start_date" AS "devicesCertsStartDate", "devices->certs"."expiry_date" AS "devicesCertsExpirydate", "devices->certs"."cert_file" AS "devicesCertsCertFile", "devices->certs"."revoked" AS "devicesCertsRevoked", "devices->certs"."createdAt" AS "devicesCertsCreatedAt", "devices->certs"."updatedAt" AS "devicesCertsUpdatedAt", "devices->certs->device_cert"."createdAt" AS "devicesCertsDeviceCertCreatedAt", "devices->certs->device_cert"."updatedAt" AS "devicesCertsDeviceCertUpdatedAt", "devices->certs->device_cert"."certId" AS "devicesCertsDeviceCertCertId", "devices->certs->device_cert"."deviceId" AS "devicesCertsDeviceCertDeviceId","devices->certs"."changeRef" AS "devicesCertsDeviceCertChangeRef","devices->certs"."commonName" AS "devicesCertsDeviceCertCommonName","devices->certs"."leadTime" AS "CertLeadTime","devices->certs"."type" AS "devicesCertsDeviceCertType", \
-        "user"."id" AS "userId", "user"."name" AS "certuserName", "user"."createdAt" AS "userCreatedAt", "user"."updatedAt" AS "userUpdatedAt" \
-        FROM "projects" AS "project" \
-        LEFT OUTER JOIN ( "project_devices" AS "devices->project_device" \
-        INNER JOIN "devices" AS "devices" ON "devices"."id" = "devices->project_device"."deviceId") ON "project"."id" = "devices->project_device"."projectId" \
-        LEFT OUTER JOIN ( "device_certs" AS "devices->certs->device_cert" \
-        INNER JOIN "certs" AS "devices->certs" ON "devices->certs"."id" = "devices->certs->device_cert"."certId") ON "devices"."id" = "devices->certs->device_cert"."deviceId" \
-        LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
-        WHERE "devices->certs"."name" != \'null\' \
-        AND UPPER(project.name) like \'%'+projectfilter.toUpperCase()+'%\' \
-        and UPPER("devices"."name") like \'%'+devicefilter.toUpperCase()+'%\' \
-        and UPPER("devices->certs"."name") like \'%'+certfilter.toUpperCase()+'%\' \
-        order by "devicesCertsExpirydate","devicesCertsName" ;'
-
-        squery = 'select "certs"."id" as "CertID","certs"."name" as "cert name", "certs"."start_date" as "Cert Start Date","certs"."expiry_date" as "Cert Expirty Date","certs"."cert_file" as "File","certs"."revoked" as "Revoked","certs"."changeRef" as "Change Ref","certs"."start_date" as "Cert Start Date","certs"."commonName" as "Common Name","certs"."leadTime" as "Lead Time","certs"."type" as "Cert Type","certs"."revokedDate" as "Revoked Date", \
-        "project"."name" as "project name", "project"."id" as "project id","devices"."name" as "Device name","user"."email" as "user email" \
-        from "certs" \
-        inner join "projects" as "project" on "project"."id" = "certs"."project" \
-        LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
-         LEFT OUTER JOIN ( "project_devices" AS "devices->project_device" \
-            INNER JOIN "devices" AS "devices" ON "devices"."id" = "devices->project_device"."deviceId") ON "project"."id" = "devices->project_device"."projectId" \
-            order by "certs"."name"'
-
-            squery = 'select "certs"."id" as "certId","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."changeRef" as "certChangeRef","certs"."start_date" as "certStartDate","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certType","certs"."revokedDate" as "certRevokedDate", \
+        squery = 'select "certs"."id" as "certId","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."changeRef" as "certChangeRef","certs"."start_date" as "certStartDate","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certType","certs"."revokedDate" as "certRevokedDate", \
             "project"."name" as "projectName", "project"."id" as "projectId","user"."email" as "userEmail" \
             from "certs" \
             inner join "projects" as "project" on "project"."id" = "certs"."project" \
@@ -157,12 +112,18 @@ console.log(response.body);
     console.log("*********** request : "+request.body.certFilter);
     console.log("call db func");
     kev = "";
-    rowcount=countrec();
-    console.log("row count"+rowcount);
-    readdb().then((rowid) => {
+    
+    if (request.session.user && request.cookies.user_sid) {
+        rowcount=countrec();
+        console.log("row count"+rowcount);
+        readdb().then((rowid) => {
         console.log(rowid)//Value here is defined as u expect.
-    });
-    console.log("after db func");
+        });
+        console.log("after db func");
+    } else {
+        console.log("user not logged in")
+        res.redirect('/login');
+    };
 };
 
 
@@ -170,7 +131,6 @@ console.log(response.body);
 module.exports.certsGetOne = function (request, response, next) {
     console.log("running get single cert...");
     const find_cert_id = request.params.certId;
-    // if (request.session.user && request.cookies.user_sid) {
 
     function runsql2 (sqlquery) {
         return new Promise((resolve, reject) => {
@@ -183,98 +143,86 @@ module.exports.certsGetOne = function (request, response, next) {
         })
     }
 
-    console.log("user during get cert "+username);
-    
-    get_project_list = 'SELECT id as projectid, name as projectname from projects';
+    if (request.session.user && request.cookies.user_sid) {
+        console.log("user during get cert "+username);
+        
+        get_project_list = 'SELECT id as projectid, name as projectname from projects';
+        get_device_list = 'SELECT id as deviceid, name as devicename from devices';
+        get_cert_type_list = 'SELECT id as certTypeId, name as certTypeName from cert_types';
+        get_all_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
+        "project"."name" as "projectname","user"."name" as "userName","user"."email" as "userEmail", \
+        "certtype"."name" as "certtypename" \
+        from "certs" \
+        inner join "projects" as "project" on "project"."id" = "certs"."project" \
+        inner join "cert_types" as "certtype" on "certtype"."id" = "certs"."type" \
+        LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
+        WHERE "certs"."id" = '+find_cert_id
+        get_devices_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as \ "certRevoked","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
+        "project"."name" as "projectname","user"."name" as "userName","user"."email" as "userEmail", \
+        "certtype"."name" as "certtypename", \
+        "devices"."name" as "deviceName", "devices"."id" as "deviceid" \
+        from "certs" \
+        inner join "projects" as "project" on "project"."id" = "certs"."project" \
+        inner join "cert_types" as "certtype" on "certtype"."id" = "certs"."type" \
+        LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
+        inner join device_certs as junc  on certs.id = junc."certId" \
+        inner join devices  on devices.id = junc."deviceId" \
+        WHERE "certs"."id" = '+find_cert_id
 
+        console.log(get_all_squery);
 
-    get_device_list = 'SELECT id as deviceid, name as devicename from devices';
-    
-    get_cert_type_list = 'SELECT id as certTypeId, name as certTypeName from cert_types';
-
-    get_all_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
-    "project"."name" as "projectname","user"."name" as "userName","user"."email" as "userEmail", \
-    "certtype"."name" as "certtypename" \
-    from "certs" \
-    inner join "projects" as "project" on "project"."id" = "certs"."project" \
-    inner join "cert_types" as "certtype" on "certtype"."id" = "certs"."type" \
-    LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
-    WHERE "certs"."id" = '+find_cert_id
-
-    get_devices_squery = 'select "devices"."id" as "deviceId","devices"."name" as "deviceName" \
-    from "devices" \
-    inner join "projects" as "project" on "project"."id" = "certs"."project" \
-    LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
-    LEFT OUTER JOIN ( "project_devices" AS "devices->project_device" \
-    INNER JOIN "devices" AS "devices" ON "devices"."id" = "devices->project_device"."deviceId") ON "project"."id" = "devices->project_device"."projectId" \
-    WHERE "certs"."id" = '+find_cert_id
-
-
-    get_devices_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as \ "certRevoked","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
-    "project"."name" as "projectname","user"."name" as "userName","user"."email" as "userEmail", \
-    "certtype"."name" as "certtypename", \
-	"devices"."name" as "deviceName", "devices"."id" as "deviceid" \
-    from "certs" \
-    inner join "projects" as "project" on "project"."id" = "certs"."project" \
-    inner join "cert_types" as "certtype" on "certtype"."id" = "certs"."type" \
-    LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
-	inner join device_certs as junc  on certs.id = junc."certId" \
-	inner join devices  on devices.id = junc."deviceId" \
-    WHERE "certs"."id" = '+find_cert_id
-
-console.log(get_all_squery);
-
-    Promise.all([
-        runsql2(get_project_list),
-        runsql2(get_device_list),
-        runsql2(get_cert_type_list),
-        runsql2(get_all_squery),
-        runsql2(get_devices_squery)
-      ])
-      .then(data => {
-        projects=[]
-        devices=[]
-        certtypes=[]
-        certdevices=[]
-        certdetails=[]
-        proects=data[0]
-        devices=data[1]
-        certtypes=data[2]
-        certDetails=data[3]
-        certdevices=data[4]
-        var certname = certDetails[0].certName;
-        var today = new Date();
-        var projectname = certDetails[0].projectname;
-        //var devicename = res.rows[0].devicesName;
-        var sdate = date.format(certDetails[0].certStartDate, 'YYYY-MM-DD');
-        var edate = date.format(certDetails[0].certExpiryDate, 'YYYY-MM-DD');
-        var daysLeft = date.subtract(certDetails[0].certExpiryDate, today).toDays();
-        var contact = certDetails[0].userName
-        var changeref = certDetails[0].certChangeRef;
-        var commonName = certDetails[0].certCommonName;
-        var leadTime = certDetails[0].certLeadTime;
-        var certtype = certDetails[0].certTypeId;
-        var certRevoked = certDetails[0].certRevoked; 
-        var projectname = certDetails[0].projectname;
-        var certtypename = certDetails[0].certtypename
-        var userEmail = certDetails[0].userEmail
-        revokedVis="hidden";
-        if (certDetails[0].certRevoked) {
-            var certRevokedDate = date.format(certDetails[0].certRevokedDate, 'YYYY-MM-DD');
-            certRevoked = "checked"
-            revokedVis = "visible"
-        };
-        // var sysname = res.rows[0].systemname;
-        var certfile = certDetails[0].certFile;
-        console.log("project : "+projectname);
-        // console.log(res.rows)
-        console.log("render one cert")
-        response
-            .render('getCert', { data: certDetails, certdevices: certdevices, userEmail: userEmail, certtype: certtype,certtypename: certtypename, projectname: projectname, projects: projects,revokedVis: revokedVis,devices: devices, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact, sdate: sdate, edate: edate, projectname: projectname, dleft: daysLeft,certfile: certfile,certid: find_cert_id,accessLvl: accessLvl });
-    
-        console.log("Second handler", data);
-      })
-      .catch((err) => console.log(err))
+        Promise.all([
+            runsql2(get_project_list),
+            runsql2(get_device_list),
+            runsql2(get_cert_type_list),
+            runsql2(get_all_squery),
+            runsql2(get_devices_squery)
+        ])
+        .then(data => {
+            projects=[]
+            devices=[]
+            certtypes=[]
+            certdevices=[]
+            certdetails=[]
+            proects=data[0]
+            devices=data[1]
+            certtypes=data[2]
+            certDetails=data[3]
+            certdevices=data[4]
+            var certname = certDetails[0].certName;
+            var today = new Date();
+            var projectname = certDetails[0].projectname;
+            var sdate = date.format(certDetails[0].certStartDate, 'YYYY-MM-DD');
+            var edate = date.format(certDetails[0].certExpiryDate, 'YYYY-MM-DD');
+            var daysLeft = date.subtract(certDetails[0].certExpiryDate, today).toDays();
+            var contact = certDetails[0].userName
+            var changeref = certDetails[0].certChangeRef;
+            var commonName = certDetails[0].certCommonName;
+            var leadTime = certDetails[0].certLeadTime;
+            var certtype = certDetails[0].certTypeId;
+            var certRevoked = certDetails[0].certRevoked; 
+            var projectname = certDetails[0].projectname;
+            var certtypename = certDetails[0].certtypename
+            var userEmail = certDetails[0].userEmail
+            revokedVis="hidden";
+            if (certDetails[0].certRevoked) {
+                var certRevokedDate = date.format(certDetails[0].certRevokedDate, 'YYYY-MM-DD');
+                certRevoked = "checked"
+                revokedVis = "visible"
+            };
+            var certfile = certDetails[0].certFile;
+            console.log("project : "+projectname);
+            console.log("render one cert")
+            response
+                .render('getCert', { data: certDetails, certdevices: certdevices, userEmail: userEmail, certtype: certtype,certtypename: certtypename, projectname: projectname, projects: projects,revokedVis: revokedVis,devices: devices, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact, sdate: sdate, edate: edate, projectname: projectname, dleft: daysLeft,certfile: certfile,certid: find_cert_id,accessLvl: accessLvl });
+        
+            console.log("Second handler", data);
+        })
+        .catch((err) => console.log(err))
+    } else {
+        console.log("user not logged in")
+        response.redirect('/login');
+    };
 };
 
 module.exports.certAddOne = function (request, response, next) {
@@ -291,18 +239,20 @@ module.exports.certAddOne = function (request, response, next) {
         })
       }
 
-
-    console.log("call sync");
-    Promise.all([
-        runsql2('SELECT id as deviceid, name as devicename from devices'),
-        runsql2('SELECT id as Id,email as userEmail from users'),
-        runsql2('SELECT id as projectid, name as projectname from projects')
-      ])
-      .then((result) => response.render('addCert', { devices: result[0],userlist:result[1], projects:result[2], title: 'Add Cert' }))
-      .catch((err) => console.log(err))
+    if (request.session.user && request.cookies.user_sid) {   
+        console.log("call sync");
+        Promise.all([
+            runsql2('SELECT id as deviceid, name as devicename from devices'),
+            runsql2('SELECT id as Id,email as userEmail from users'),
+            runsql2('SELECT id as projectid, name as projectname from projects')
+        ])
+        .then((result) => response.render('addCert', { devices: result[0],userlist:result[1], projects:result[2], title: 'Add Cert' }))
+        .catch((err) => console.log(err))
+    } else {
+        console.log("user not logged in")
+        response.redirect('/login');
+    };
 };
-
-
 
 module.exports.certPost_upload_working = function(req,res,next){
     console.log("upload section");
@@ -317,16 +267,7 @@ module.exports.certPost_upload_working = function(req,res,next){
 
 
 module.exports.certPost = function (request, response, next) {
-    certFileName="";
-    let certFile = request.files.theFile;
-    if (certFile) {console.log("file upload details : "+certFile.name)
-    certFile.mv(appRoot+'/uploads/'+certFile.name, function(err) {
-        if (err)
-          console.log("file upload failed "+err);
-          console.log("file upload done");
-        var fileUploaded = true;
-      })
-    certFileName=certFile.name};
+
     function insertcert(body) {
         console.log("insert command");
         console.log(body);
@@ -363,95 +304,102 @@ module.exports.certPost = function (request, response, next) {
         })
     };
 
-    insertcert(request.body).then((certdevice) => {
-        console.log("junction body");
-        console.log(request.body);
-        var tmparry=[];
-        var adddevice=[];
-        var adddevice = tmparry.concat(request.body.certdevice);
-        var projectId = request.body.certproj;
-        console.log("devices")
-        console.log(adddevice);
-        pool.query('select max(id) from certs', (err, res) => {
-            if (err) return next(err);
-            // console.log("max::");
-            console.log("max row : "+res.rows[0].max);
-            // console.log("done max 2" + system + ":" + res.rows[0].max)//Value here is defined as u expect.
-            console.log("list devices") 
-            // for (var entry in device) {
-            // device.forEach(function(entry) {
-            var index;
-            for (index = 0; index < adddevice.length; ++index) {
-                console.log(index+"device : "+adddevice[index])
-                pool.query('INSERT INTO device_certs("certId","deviceId") VALUES($1, $2)',
-                    [res.rows[0].max, adddevice[index]],
-                    (err, res) => {
-                    if (err) return next(err);
-                });
-                pool.query('INSERT INTO project_devices("projectId","deviceId") VALUES($1, $2)',
-                    [projectId, res.rows[0].max],
-                    (err, res) => {
-                    if (err) return next(err);
-                });
-            };
+    if (request.session.user && request.cookies.user_sid) {
+        certFileName="";
+        let certFile = request.files.theFile;
+        if (certFile) {console.log("file upload details : "+certFile.name)
+        certFile.mv(appRoot+'/uploads/'+certFile.name, function(err) {
+            if (err)
+            console.log("file upload failed "+err);
+            console.log("file upload done");
+            var fileUploaded = true;
         })
+        certFileName=certFile.name};
 
-        pool.query('select max(id) from certs', (err, res) => {
-            if (err) return next(err);
-            response.redirect('/certs');
-        })
-    });
-    // response.redirect('/certs');
+        insertcert(request.body).then((certdevice) => {
+            console.log("junction body");
+            console.log(request.body);
+            var tmparry=[];
+            var adddevice=[];
+            var adddevice = tmparry.concat(request.body.certdevice);
+            var projectId = request.body.certproj;
+            console.log("devices")
+            console.log(adddevice);
+            pool.query('select max(id) from certs', (err, res) => {
+                if (err) return next(err);
+                // console.log("max::");
+                console.log("max row : "+res.rows[0].max);
+                // console.log("done max 2" + system + ":" + res.rows[0].max)//Value here is defined as u expect.
+                console.log("list devices") 
+                // for (var entry in device) {
+                // device.forEach(function(entry) {
+                var index;
+                for (index = 0; index < adddevice.length; ++index) {
+                    console.log(index+"device : "+adddevice[index])
+                    pool.query('INSERT INTO device_certs("certId","deviceId") VALUES($1, $2)',
+                        [res.rows[0].max, adddevice[index]],
+                        (err, res) => {
+                        if (err) return next(err);
+                    });
+                    pool.query('INSERT INTO project_devices("projectId","deviceId") VALUES($1, $2)',
+                        [projectId, res.rows[0].max],
+                        (err, res) => {
+                        if (err) return next(err);
+                    });
+                };
+            })
+
+            pool.query('select max(id) from certs', (err, res) => {
+                if (err) return next(err);
+                response.redirect('/certs');
+            })
+        });
+        // response.redirect('/certs');
+    } else {
+        console.log("user not logged in")
+        res.redirect('/login');
+    };
 };
-
-
-
-module.exports.certUpdatetest = function (req, res, next) {
-    // let certFile = req.files.theFile;
-    console.log("lefts do this");
-    console.log(req.body);
-};
-
-
 
 module.exports.certUpdate = function (request, response, next) {
     var certFileName= "";
     let certFile = request.files.newcertfile;
     console.log("check for a new file "+request.files.newcertfile);
     if (certFile) {console.log("file upload details : "+certFile.name)
-    certFileName=certFile.name;
-    certFile.mv(appRoot+'/uploads/'+certFile.name, function(err) {
-        if (err)
-          console.log("file upload failed "+err);
-          console.log("file upload done");
-        var fileUploaded = true;
-      })};
+        certFileName=certFile.name;
+        certFile.mv(appRoot+'/uploads/'+certFile.name, function(err) {
+            if (err) {
+                console.log("file upload failed "+err);
+                console.log("file upload done");
+                var fileUploaded = true;
+            };
+        })
+    };
 
-        console.log("insert command");
-        console.log(request.body);
-        console.log(request.files);
-        
-        console.log("body");
-        var today = new Date();
-        const { certid,name, created_date, expiry_date, start_date, device,currentCertFile,certdevicejuncid } = request.body;
-        var usethisfilename = currentCertFile;
-        console.log(certFileName+" : "+currentCertFile);
+    console.log("insert command");
+    console.log(request.body);
+    console.log(request.files);
+    console.log("body");
+    var today = new Date();
+    const { certid,name, created_date, expiry_date, start_date, device,currentCertFile,certdevicejuncid } = request.body;
+    var usethisfilename = currentCertFile;
+    console.log(certFileName+" : "+currentCertFile);
 
-        if (certFileName) {usethisfilename = certFileName};
-
-        return new Promise(function (resolve, reject) {
+    if (certFileName) {usethisfilename = certFileName};
+    return new Promise(function (resolve, reject) {
         console.log("lets do an update ");
         console.log("file name : "+usethisfilename);
-            pool.query('UPDATE cert SET name = $2, created_date = $3, expiry_date = $4, start_date = $5, cert_file = $6 where row_id = $1',[certid,name, created_date, expiry_date, start_date, usethisfilename],(err, res) => {
-            if (err) return next(err);
+        pool.query('UPDATE cert SET name = $2, created_date = $3, expiry_date = $4, start_date = $5, cert_file = $6 where row_id = $1',[certid,name, created_date, expiry_date, start_date, usethisfilename],(err, res) => {
+        if (err) return next(err);
             console.log("************** cert id : "+certid);
             console.log("************** device id : "+device);
             console.log("************** junction row : "+certdevicejuncid);
             pool.query('UPDATE cert_device_junc SET cert = certid, device = device WHERE row_id = certdevicejuncid',
-            (err, res) => {
-                if (err) return next(err);
-            })
+                (err, res) => {
+                    if (err) return next(err);
+                })
             console.log("insert : "+res);
             response.redirect('/certs');
-        })});
+        })
+    });
 };

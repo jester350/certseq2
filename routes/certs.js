@@ -17,4 +17,8 @@ router.route("/record:certId").get(ctrlCerts.certsGetOne);
 router.route("/updateCert").post(ctrlCerts.certUpdate);
 router.route("/filter").post(ctrlCerts.certsGetAll);
 
+router.use(function(req, res) {
+    res.send('404: Page not Found!', 404);
+});
+
 module.exports = router;

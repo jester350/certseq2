@@ -13,4 +13,8 @@ router.route("/").get(ctrlUsers.listall);
 router.route("/adduser").get(ctrlUsers.add);
 router.route("/postuser").post(ctrlUsers.postUser);
 
+router.use(function(req, res) {
+    res.send('404: Page not Found!', 404);
+});
+
 module.exports = router;

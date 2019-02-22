@@ -15,4 +15,8 @@ router.route("/postdevice").post(ctrlDevice.postDevice);
 //router.route("/updateCert").post(ctrlDevice.deviceUpdate);
 //router.route("/filter").post(ctrlDevice.deviceGetAll);
 
+router.use(function(req, res) {
+    res.send('404: Page not Found!', 404);
+});
+
 module.exports = router;

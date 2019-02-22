@@ -10,7 +10,10 @@ console.log("projects route");
 //});
 
 router.route("/").all(ctrlProjects.listall);
-
 router.route("/postProject").all(ctrlProjects.postProject)
+
+router.use(function(req, res) {
+    res.send('404: Page not Found!', 404);
+});
 
 module.exports = router;
