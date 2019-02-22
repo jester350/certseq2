@@ -8,6 +8,7 @@ fs = require('fs');
 
 
 module.exports.listall = function (request, response, next) {
+    if (request.session.user && request.cookies.user_sid) {
     console.log("list projects");
     var offset = 0;
     var count = 10;
@@ -75,10 +76,15 @@ module.exports.listall = function (request, response, next) {
                 .render('listProjects', { data: result[0].slice(offset,offset+count),recordDetails: recordDetails,userlist: result[1], title: 'List Projects' ,uname: username, accessLvl: accessLvl,projectfilter: projectfilter,emailfilter: emailfilter});
 
         })
+    } else {
+        console.log("user not logged in")
+        res.redirect('/login');
+    };
 };
 
 
 module.exports.postProject = function (request, response, next) {
+    if (request.session.user && request.cookies.user_sid) {
     console.log("post project : "+request.body.newproject);
     projectname = request.body.newproject
     projectuser = request.body.newprojectuser
@@ -97,5 +103,8 @@ module.exports.postProject = function (request, response, next) {
             }
         )
     })
-
+} else {
+    console.log("user not logged in")
+    res.redirect('/login');
+};
 };
