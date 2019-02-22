@@ -3,7 +3,7 @@ var router = express.Router();
 
 var ctrlUsers = require("../controllers/user.controller.js");
 
-console.log("users route");
+console.log("users route ");
 
 //router.get("/", function(req, res, next) {
 //  res.render("list_certs", { title: "BPDTS Certs" });
@@ -14,7 +14,7 @@ router.route("/adduser").get(ctrlUsers.add);
 router.route("/postuser").post(ctrlUsers.postUser);
 
 router.use(function(req, res) {
-    res.send('404: Page not Found!', 404);
+    res.send('404: You\'re lost!', 404);
 });
 
 module.exports = router;

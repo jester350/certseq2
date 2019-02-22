@@ -1,15 +1,15 @@
+
 <div class = "row">
 <div class = "col-md-1"></div>
 <div class = "col-md-10">
 <nav aria-label="Page navigation example">
-<ul class="pagination">
+  <ul class="pagination">
 <div id="pagebut"></div>
-</ul>
+  </ul>
 </nav>
 <div id="afterbut"></div>
 
 <script type="text/javascript">
-console.log("render page");
 var i;
 var navline='<li class="page-item"><a class="page-link" href="#" aria-label="Previous"> <span aria-hidden="true">&laquo;</span> <span class="sr-only">Previous</span></a></li>'; 
 currpage=({{recordDetails.currentPage}}/{{recordDetails.recPerPage}}+1);
@@ -33,7 +33,7 @@ var d1 = document.getElementById('pagebut');
 d1.insertAdjacentHTML('afterend', navline);
 var d2 = document.getElementById('afterbut');
 
-// d2.insertAdjacentHTML('afterend', endline);
+d2.insertAdjacentHTML('afterend', endline);
 </script>
 
 <script>
@@ -49,10 +49,10 @@ function nextpage() {
 </script>
 
 <select name="recordsToDisplay" id="recordsToDisplay">
-  <option value="10">10</option>
-  <option value="20" selected>20</option>
-  <option value="50">50</option>
-  <option value="ALL">ALL</option>
+<option value="10">10</option>
+<option value="20" selected>20</option>
+<option value="50">50</option>
+<option value="ALL">ALL</option>
 </select>
 </div></div>
 <script>
@@ -61,11 +61,6 @@ var txt = "";
 txt += "The node value: " + x.nodeValue + "<br>";
 // alert(txt);
 </script>
-
-<div class="container jf-form">
-<form data-licenseKey="" name="jqueryform-4d4fe5" id="filterprojects" action='/projects' method='post' enctype='multipart/form-data' novalidate autocomplete="on">
-<input type="hidden" name="method" value="validateForm">
-<input type="hidden" id="serverValidationFields" name="serverValidationFields" value="">
 
 <div class = "row">
 <div class = "col-md-1"></div>
@@ -112,11 +107,7 @@ txt += "The node value: " + x.nodeValue + "<br>";
             </tr>{{/each}}
         </tbody>
        </table>
- 
-
-
-            
-            
+     
     <table class ="table">
         <thead>
         <form action="/projects/postProject" method="post" name="newproject" id="newproject" encType="multipart/form-data">
@@ -143,70 +134,3 @@ txt += "The node value: " + x.nodeValue + "<br>";
             </table></div>
         </div>
 </div>
-
-<!-- [ Start: Select2 support ] ---------------------------------- -->
-<link rel="stylesheet" type="text/css" href="/modules/select2/dist/css/select2.min.css">
-<script type="text/javascript" src="/modules/select2/dist/js/select2.full.min.js"></script>
-<style type="text/css">
-.select2-hidden-accessible{
-	opacity: 0;
-    width:1% !important;
-}
-.select2-container .select2-selection--single{
-  height: 34px;
-  padding-top: 2px;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-  border: 1px solid #ccc;
-}
-.select2-container--default .select2-selection--single .select2-selection__arrow{
-  top: 4px;
-}
-</style>
-<script type="text/javascript">
-;(function(){
-	
-	function templateResult (obj) {
-	  if (!obj.id) { return obj.text; }
-
-	  var img = $(obj.element).data('imgSrc');
-	  if( img ){
-	    return $( '<span><img src="' + img + '" class="img-flag" /> ' + obj.text + '</span>' );
-	  };
-
-	  return obj.text;
-	};
-	 
-	$(".jf-form select").css('width', '100%'); // make it responsive
-	$(".jf-form select").select2({
-	  templateResult: templateResult
-	}).change( function(e){
-	  $(e.target).valid();
-	});
-
-})();
-</script>
-<!-- [ End: Select2 support ] ---------------------------------- -->
-
-
-<script type="text/javascript">
-
-	// start jqueryform initialization
-	// --------------------------------
-	JF.init('#jqueryform-4d4fe5');
-
-	// watch form element change event to run jqueryform's formlogic
-	// ---------------------------------------------------------------
-	var logics = [
-    {
-        "disabled": false,
-        "action": "",
-        "selector": "",
-        "match": "",
-        "rules": []
-    }
-];
-	$('input,input:radio,select').change(function(){
-		$.formlogic( {logics: logics} );
-	});
-</script>
-</body>
