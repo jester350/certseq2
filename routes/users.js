@@ -9,8 +9,8 @@ console.log("users route ");
 //  res.render("list_certs", { title: "BPDTS Certs" });
 //});
 
-router.route("/").get(ctrlUsers.listall);
-router.route("/adduser").get(ctrlUsers.add);
+router.route("/").all(ctrlUsers.listall);
+// router.route("/adduser").all(ctrlUsers.listall);
 router.route("/postuser").post(ctrlUsers.postUser);
 
 router.use(function(req, res) {

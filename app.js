@@ -225,7 +225,7 @@ app.get('/user', (req, res,next) => {
     console.log("user admin");
     if (req.session.user && req.cookies.user_sid) {
         if (accessLvl == 1) {
-            res.sendFile(__dirname + '/public/pages/signup.html');
+            // res.sendFile(__dirname + '/public/pages/signup.html');
             app.use('/users',usersRouter);
         next();
     } else {
