@@ -143,6 +143,22 @@ module.exports.certsGetOne = function (request, response, next) {
         })
     }
 
+    function inArray(target, array)
+    {
+
+    /* Caching array.length doesn't increase the performance of the for loop on V8 (and probably on most of other major engines) */
+
+        for(var i = 0; i < array.length; i++) 
+        {
+            if(array[i].deviceid === target)
+            {
+            return true;
+            }
+        }
+
+    return false; 
+    }
+
     if (request.session.user && request.cookies.user_sid) {
         console.log("user during get cert "+username);
         
@@ -211,10 +227,18 @@ module.exports.certsGetOne = function (request, response, next) {
                 revokedVis = "visible"
             };
             var certfile = certDetails[0].certFile;
+            filteredDeviceList=[]
+            for(var i = 0; i < devices.length; i++) 
+            {
+                if(inArray(devices[i].deviceid, certdevices) === false)
+                { filteredDeviceList.push(devices[i])
+                }
+            }
+
             console.log("project : "+projectname);
             console.log("render one cert")
             response
-                .render('getCert', { data: certDetails, certdevices: certdevices, userEmail: userEmail, certtype: certtype,certtypename: certtypename, projectname: projectname, projects: projects,revokedVis: revokedVis,devices: devices, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact, sdate: sdate, edate: edate, projectname: projectname, dleft: daysLeft,certfile: certfile,certid: find_cert_id,accessLvl: accessLvl });
+                .render('getCert', { data: certDetails, certdevices: certdevices, userEmail: userEmail, certtype: certtype,certtypename: certtypename, projectname: projectname, projects: projects,revokedVis: revokedVis,devices: filteredDeviceList, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact, sdate: sdate, edate: edate, projectname: projectname, dleft: daysLeft,certfile: certfile,certid: find_cert_id,accessLvl: accessLvl });
         
             console.log("Second handler", data);
         })
