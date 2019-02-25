@@ -96,7 +96,7 @@
             {{#each certdevices}}
                 <tr class="{{classtype}}">
                     <td>{{deviceName}}</td>
-                    <td><input type="checkbox" name="removecert_cert{{{devicesCertsId}}}_dev{{{devicesId}}}" value="delete"></td>
+                    <td><input type="checkbox" id="removecert_cert" name="deldevice" value="{{{deviceid}}}"></td>
                 </tr>
             {{/each}}
             </tbody>
@@ -118,6 +118,7 @@
 </div>
 
     <br><input type="submit" value='Submit'>
+    
 </form>
 </div>
 </div>

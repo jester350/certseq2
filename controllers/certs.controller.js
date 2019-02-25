@@ -413,7 +413,7 @@ module.exports.certUpdate = function (request, response, next) {
     return new Promise(function (resolve, reject) {
         console.log("lets do an update ");
         console.log("file name : "+usethisfilename);
-        pool.query('UPDATE cert SET name = $2, created_date = $3, expiry_date = $4, start_date = $5, cert_file = $6 where row_id = $1',[certid,name, created_date, expiry_date, start_date, usethisfilename],(err, res) => {
+        pool.query('UPDATE certx SET name = $2, created_date = $3, expiry_date = $4, start_date = $5, cert_file = $6 where row_id = $1',[certid,name, created_date, expiry_date, start_date, usethisfilename],(err, res) => {
         if (err) return next(err);
             console.log("************** cert id : "+certid);
             console.log("************** device id : "+device);
