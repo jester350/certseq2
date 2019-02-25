@@ -164,7 +164,7 @@ module.exports.certsGetOne = function (request, response, next) {
         
         get_project_list = 'SELECT id as projectid, name as projectname from projects';
         get_device_list = 'SELECT id as deviceid, name as devicename from devices';
-        get_cert_type_list = 'SELECT id as certTypeId, name as certTypeName from cert_types';
+        get_cert_type_list = 'SELECT id as listcertTypeId, name as listcertTypeName from cert_types';
         get_all_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
         "project"."name" as "projectname","user"."name" as "userName","user"."email" as "userEmail", \
         "certtype"."name" as "certtypename" \
@@ -238,7 +238,7 @@ module.exports.certsGetOne = function (request, response, next) {
             console.log("project : "+projectname);
             console.log("render one cert")
             response
-                .render('getCert', { data: certDetails, certdevices: certdevices, userEmail: userEmail, certtype: certtype,certtypename: certtypename, projectname: projectname, projects: projects,revokedVis: revokedVis,devices: filteredDeviceList, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact, sdate: sdate, edate: edate, projectname: projectname, dleft: daysLeft,certfile: certfile,certid: find_cert_id,accessLvl: accessLvl });
+                .render('getCert', { data: certDetails, certdevices: certdevices, userEmail: userEmail,certlist: certtypes, certtype: certtype,certtypename: certtypename, projectname: projectname, projects: projects,revokedVis: revokedVis,devices: filteredDeviceList, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact, sdate: sdate, edate: edate, projectname: projectname, dleft: daysLeft,certfile: certfile,certid: find_cert_id,accessLvl: accessLvl });
         
             console.log("Second handler", data);
         })

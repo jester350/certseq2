@@ -1,9 +1,5 @@
 
-<div class="container jf-form">
-<form data-licenseKey="" name="jqueryform-4d4fe5" id="jqueryform-4d4fe5" action='postcert' method='post' enctype='multipart/form-data' novalidate autocomplete="on">
-<input type="hidden" name="method" value="validateForm">
-<input type="hidden" id="serverValidationFields" name="serverValidationFields" value="">
-<div class="form-group f2 required" data-fid="f2"></div>
+
 
 <div class = "row">
 <div class = "col-md-1"></div>
@@ -34,12 +30,18 @@
             </div>
         </div>   
 
-        <div class="form-group row">
-            <label for="certtype" class="col-sm-1 col-form-label mb-2 mr-sm-2">Cert Type</label>
-            <div class="col-sm-2">
-                <input type="text" name="certtype" id="certtype" class="form-control mb-2 mr-sm-2" size=5px value="{{{certtypename}}}">
-            </div>
+        <div class="form-group row" size="5">
+            <label for="certtype" class="col-sm-2 col-form-label mb-2 mr-sm-2">Cert Type</label>
+            <select name = "certtype" id="certtype" selected = {{{listcerttypename}}}>
+                {{#each certlist}}
+                    <option value="{{listcerttypeid}}" option selected="" id="{{listcerttypename}}" size="35">{{listcerttypename}}</option>
+                {{/each}}
+            </select>
         </div>
+
+        <script type="text/javascript">
+        document.getElementById("{{certtypename}}").selected = "Selected";
+        </script>
 
         <div class="form-inline">
             <label for="date3" class="col-sm-0 col-form-label mb-2 mr-sm-2">Start Date</label>
@@ -103,6 +105,11 @@
             {{/each}}
             </tbody>
         </table>
+<div class="container jf-form">
+<form data-licenseKey="" name="jqueryform-4d4fe5" id="jqueryform-4d4fe5" action='postcert' method='post' enctype='multipart/form-data' novalidate autocomplete="on">
+<input type="hidden" name="method" value="validateForm">
+<input type="hidden" id="serverValidationFields" name="serverValidationFields" value="">
+<div class="form-group f2 required" data-fid="f2"></div>
 
 <div class="form-group certdevice " data-fid="certdevice">
   <label class="control-label" for="certdevice">Device</label>
