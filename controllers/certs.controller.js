@@ -405,7 +405,8 @@ module.exports.certUpdate = function (request, response, next) {
     console.log(request.files);
     console.log("body");
     var today = new Date();
-    const { certid,name, created_date, expiry_date, start_date, device,currentCertFile,certdevicejuncid } = request.body;
+    //const { certid,name, created_date, expiry_date, start_date, device,currentCertFile,certdevicejuncid } = request.body;
+    const { certid,certRevoked,certRevokedDate, created_date,certtype,changeref,commonname,expiry_date,leadtime,start_date } = request.body;
     var usethisfilename = currentCertFile;
     console.log(certFileName+" : "+currentCertFile);
 
