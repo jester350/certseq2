@@ -405,25 +405,62 @@ module.exports.certUpdate = function (request, response, next) {
     console.log(request.files);
     console.log("body");
     var today = new Date();
+
     //const { certid,name, created_date, expiry_date, start_date, device,currentCertFile,certdevicejuncid } = request.body;
-    const { certid,certRevoked,certRevokedDate, created_date,certtype,changeref,commonname,expiry_date,leadtime,start_date } = request.body;
+    const { certid,certRevoked,certtype,changeref,commonname,expiry_date,leadtime,start_date,currentCertFile,certdevice,deldevice } = request.body;
     var usethisfilename = currentCertFile;
+    if (request.body.certRevokedDate) {
+        var certRevokedDate = request.body.certRevokedDate
+    } else {
+        var certRevokedDate = "27/12/1977"
+    };
+  
     console.log(certFileName+" : "+currentCertFile);
 
     if (certFileName) {usethisfilename = certFileName};
+    tmparry=[]
+    addthesedevices=tmparry.concat(certdevice)
+    tmparry=[]
+    delthsedevices=tmparry.concat(deldevice)
+
+    if (certdevice) {
+        tmparry=[]
+        addthesedevices=tmparry.concat(certdevice)
+    for (index = 0; index < addthesedevices.length; ++index) {
+        pool.query('INSERT INTO device_certs("certId","deviceId") VALUES($1, $2)',
+            [certid, addthesedevices[index]],
+            (err, res) => {
+            if (err) return next(err);
+        });
+        };
+    };
+
+    if (deldevice) {
+        tmparry=[]
+        delthsedevices=tmparry.concat(deldevice)
+    for (index = 0; index < delthsedevices.length; ++index) {
+        pool.query('DELETE from device_certs where "certId" = $1 and "deviceId" = $2',
+            [certid, delthsedevices[index]],
+            (err, res) => {
+            if (err) return next(err);
+        });
+    };
+    };
+
+    if (certRevokedDate == "") {
+        certRevokedDate="01/01/2001";
+    }
+
     return new Promise(function (resolve, reject) {
         console.log("lets do an update ");
         console.log("file name : "+usethisfilename);
-        pool.query('UPDATE certx SET name = $2, created_date = $3, expiry_date = $4, start_date = $5, cert_file = $6 where row_id = $1',[certid,name, created_date, expiry_date, start_date, usethisfilename],(err, res) => {
-        if (err) return next(err);
-            console.log("************** cert id : "+certid);
-            console.log("************** device id : "+device);
-            console.log("************** junction row : "+certdevicejuncid);
-            pool.query('UPDATE cert_device_junc SET cert = certid, device = device WHERE row_id = certdevicejuncid',
-                (err, res) => {
-                    if (err) return next(err);
-                })
-            console.log("insert : "+res);
+        // pool.query('UPDATE certx SET name = $2, created_date = $3, expiry_date = $4, start_date = $5, cert_file = $6 where row_id = $1',[certid,name, created_date, expiry_date, start_date, usethisfilename],(err, res) => {
+        pool.query('UPDATE certs SET expiry_date = $7, start_date = $9, cert_file = $10, revoked = $2, "revokedDate" = $3, type=$4,"changeRef" = $5, "commonName" = $6, "leadTime" = $8 where certs.id = $1',[certid,certRevoked, certRevokedDate, certtype, changeref,commonname,expiry_date,leadtime,start_date, usethisfilename],(err, res) => {
+            if (err) return next(err);
+            //console.log("************** cert id : "+certid);
+            //console.log("************** device id : "+device);
+            //console.log("************** junction row : "+certdevicejuncid);
+            //console.log("insert : "+res);
             response.redirect('/certs');
         })
     });
