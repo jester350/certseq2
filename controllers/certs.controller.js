@@ -47,7 +47,7 @@ module.exports.certsGetAll = function (request, response, next) {
         console.log("request query set to : "+request.query);
         console.log("first query vars : "+certfilter+" : "+request.query.certfilter);
 
-        squery = 'select "certs"."id" as "certId","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."changeRef" as "certChangeRef","certs"."start_date" as "certStartDate","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certType","certs"."revokedDate" as "certRevokedDate", \
+        squery = 'select "certs"."id" as "certId","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."implemented" as "certimplemented","certs"."changeRef" as "certChangeRef","certs"."start_date" as "certStartDate","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certType","certs"."revokedDate" as "certRevokedDate", \
             "project"."name" as "projectName", "project"."id" as "projectId","user"."email" as "userEmail" \
             from "certs" \
             inner join "projects" as "project" on "project"."id" = "certs"."project" \
@@ -165,7 +165,7 @@ module.exports.certsGetOne = function (request, response, next) {
         get_project_list = 'SELECT id as projectid, name as projectname from projects';
         get_device_list = 'SELECT id as deviceid, name as devicename from devices';
         get_cert_type_list = 'SELECT id as listcertTypeId, name as listcertTypeName from cert_types';
-        get_all_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
+        get_all_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."implemented" as "certimplemented","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
         "project"."name" as "projectname","user"."name" as "userName","user"."email" as "userEmail", \
         "certtype"."name" as "certtypename" \
         from "certs" \
@@ -173,7 +173,7 @@ module.exports.certsGetOne = function (request, response, next) {
         inner join "cert_types" as "certtype" on "certtype"."id" = "certs"."type" \
         LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
         WHERE "certs"."id" = '+find_cert_id
-        get_devices_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as \ "certRevoked","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
+        get_devices_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."implemented" as "certimplemented","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
         "project"."name" as "projectname","user"."name" as "userName","user"."email" as "userEmail", \
         "certtype"."name" as "certtypename", \
         "devices"."name" as "deviceName", "devices"."id" as "deviceid" \
@@ -217,6 +217,7 @@ module.exports.certsGetOne = function (request, response, next) {
             var leadTime = certDetails[0].certLeadTime;
             var certtype = certDetails[0].certTypeId;
             var certRevoked = certDetails[0].certRevoked; 
+            var implemented = certDetails[0].implemented;
             var projectname = certDetails[0].projectname;
             var certtypename = certDetails[0].certtypename
             var userEmail = certDetails[0].userEmail
@@ -238,7 +239,7 @@ module.exports.certsGetOne = function (request, response, next) {
             console.log("project : "+projectname);
             console.log("render one cert")
             response
-                .render('getCert', { data: certDetails, certdevices: certdevices, userEmail: userEmail,certlist: certtypes, certtype: certtype,certtypename: certtypename, projectname: projectname, projects: projects,revokedVis: revokedVis,devices: filteredDeviceList, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact, sdate: sdate, edate: edate, projectname: projectname, dleft: daysLeft,certfile: certfile,certid: find_cert_id,accessLvl: accessLvl });
+                .render('getCert', { data: certDetails, certdevices: certdevices, userEmail: userEmail,certlist: certtypes, certtype: certtype,certtypename: certtypename, projectname: projectname, projects: projects,revokedVis: revokedVis,implemented: implemented,devices: filteredDeviceList, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact, sdate: sdate, edate: edate, projectname: projectname, dleft: daysLeft,certfile: certfile,certid: find_cert_id,accessLvl: accessLvl });
         
             console.log("Second handler", data);
         })

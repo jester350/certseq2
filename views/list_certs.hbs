@@ -70,11 +70,12 @@ txt += "The node value: " + x.nodeValue + "<br>";
             <tr>
                 <th>Cert&nbsp;Name</th>
                 <th>Project</th>
-                <th>Start Date</th>
+                <th>Issue Date</th>
                 <th>Expiry Date</th>
                 <th>Lead Time</th>
                 <th>Days till Expiry</th>
                 <th>Revoked</th>
+                <th>implemented</th>
             </tr>
         </thead>
         <thead>
@@ -100,7 +101,10 @@ txt += "The node value: " + x.nodeValue + "<br>";
                 <td>{{{certLeadTime}}}</td>
                 <td>{{{daysLeft}}}</td>
                 <td>
-                <input type="checkbox" name = "certRevoked" id="certRevoked" value="1" {{{certRevoked}}}>
+                <input type="checkbox" name = "certRevoked" id="certRevoked" value="1" readonly {{{certRevoked}}}>
+                </td>
+                <td>
+                <input type="checkbox" name = "implemented" id="implemented" value="1" readonly {{{certimplemented}}}>
                 </td>
                 {{!-- TODO: search employee name --}}
             </tr>
