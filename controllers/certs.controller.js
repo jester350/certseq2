@@ -408,7 +408,7 @@ module.exports.certUpdate = function (request, response, next) {
     var today = new Date();
 
     //const { certid,name, created_date, expiry_date, start_date, device,currentCertFile,certdevicejuncid } = request.body;
-    const { certid,certRevoked,certtype,changeref,commonname,expiry_date,leadtime,start_date,currentCertFile,certdevice,deldevice } = request.body;
+    const { certid,certRevoked,certtype,changeref,commonname,expiry_date,leadtime,start_date,currentCertFile,certdevice,deldevice,implemented } = request.body;
     var usethisfilename = currentCertFile;
     if (request.body.certRevokedDate) {
         var certRevokedDate = request.body.certRevokedDate
@@ -456,7 +456,7 @@ module.exports.certUpdate = function (request, response, next) {
         console.log("lets do an update ");
         console.log("file name : "+usethisfilename);
         // pool.query('UPDATE certx SET name = $2, created_date = $3, expiry_date = $4, start_date = $5, cert_file = $6 where row_id = $1',[certid,name, created_date, expiry_date, start_date, usethisfilename],(err, res) => {
-        pool.query('UPDATE certs SET expiry_date = $7, start_date = $9, cert_file = $10, revoked = $2, "revokedDate" = $3, type=$4,"changeRef" = $5, "commonName" = $6, "leadTime" = $8 where certs.id = $1',[certid,certRevoked, certRevokedDate, certtype, changeref,commonname,expiry_date,leadtime,start_date, usethisfilename],(err, res) => {
+        pool.query('UPDATE certs SET expiry_date = $7, start_date = $9, cert_file = $10, revoked = $2, "revokedDate" = $3, type=$4,"changeRef" = $5, "commonName" = $6, "leadTime" = $8,"implemented" = $11 where certs.id = $1',[certid,certRevoked, certRevokedDate, certtype, changeref,commonname,expiry_date,leadtime,start_date, usethisfilename,implemented],(err, res) => {
             if (err) return next(err);
             //console.log("************** cert id : "+certid);
             //console.log("************** device id : "+device);

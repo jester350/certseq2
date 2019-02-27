@@ -99,6 +99,12 @@
             </div>
         </div>
 
+<div class="container jf-form">
+<form data-licenseKey="" name="jqueryform-4d4fe5" id="jqueryform-4d4fe5" action='postcert' method='post' enctype='multipart/form-data' novalidate autocomplete="on">
+<input type="hidden" name="method" value="validateForm">
+<input type="hidden" id="serverValidationFields" name="serverValidationFields" value="">
+<div class="form-group f2 required" data-fid="f2"></div>
+
         <table class ="table table-bordered table-striped">
             <thead class ="thead-dark">
                 <tr>
@@ -106,7 +112,7 @@
                 <th>Delete</th>
                 </tr>
             </thead>
-            <tbody id="projects" class="collection with-header">
+            <tbody id="devices" class="collection with-header">
             {{#each certdevices}}
                 <tr class="{{classtype}}">
                     <td>{{deviceName}}</td>
@@ -116,25 +122,21 @@
             </tbody>
         </table>
 
-<div class="container jf-form">
-<form data-licenseKey="" name="jqueryform-4d4fe5" id="jqueryform-4d4fe5" action='postcert' method='post' enctype='multipart/form-data' novalidate autocomplete="on">
-<input type="hidden" name="method" value="validateForm">
-<input type="hidden" id="serverValidationFields" name="serverValidationFields" value="">
-<div class="form-group f2 required" data-fid="f2"></div>
+
+
+
 
 <div class="form-group certdevice " data-fid="certdevice">
-  <label class="control-label" for="certdevice">Device</label>
+  <label class="control-label" for="certdevice">Add Device</label>
 <select class="form-control" id="certdevice" name="certdevice" multiple="multiple">
       {{#each devices}}
         <option value="{{deviceid}}">{{devicename}}</option>
       {{/each}}
 </select>
 </div>
-
-    <br><input type="submit" value='Submit'>
-    
-</form>
 </div>
+<br><input type="submit" value='Update'>
+</form>
 </div>
 
 <!-- ----------------------------------------------- -->
