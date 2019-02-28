@@ -9,91 +9,105 @@
 
     <input type="hidden" id="certid" name="certid" value="{{certid}}">
     <input type="hidden" id="certdevicejuncid" name="certdevicejuncid" value="{{certdevicejuncid}}">
+
+    <div class="form-inline row">
+            <div class="col-sm-2">
+                <label for="project" class="col-form-label mb-2 mr-sm-2 float-left">Project</label>
+            </div>
+            <div class="col-sm-3">
+                <input type="text" name="project" id="project" class="form-control mb-2 mr-sm-2" readonly value="{{{projectname}}}">
+            </div>
+            <div class="col-sm-1">
+                <label for="changeref" class="col-sm-1 col-form-label mb-2 mr-sm-2">Contact</label>
+            </div>
+            <div class="col-sm-3">
+                <input type="text" name="contact" id="contact" class="form-control mb-2 mr-sm-2" readonly value="{{{userEmail}}}">
+            </div>
+    </div>   
     
-    <div class="form-inline">
-        <label for="name" class="col-sm-0 mb-2 mr-sm-2 col-form-label">Certificate Name</label>
-        <div class="form-inline col-sm-3">
-            <input type="text" name="name" id="name" class="form-control mb-2 mr-sm-2" readonly value="{{{certname}}}">
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label for="name" class="col-form-label mb-2 mr-sm-2">Common Name</label>
         </div>
-        <label for="name" class="col-sm-0 col-form-label mb-2 mr-sm-2">Common Name</label>
-        <div class="form-inline col-sm-2">
+        <div class="col-sm-3">
             <input type="text" name="commonname" id="commonname" class="form-control mb-2 mr-sm-2" value="{{{commonName}}}">
         </div>
     </div>
 
-<br>
+    <div class="form-group row">
+        <div class="col-sm-2">
+        <label for="changeref" class="col-form-label mb-2 mr-sm-2">Change Reference</label>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" name="changeref" id="changeref" class="form-control mb-2 mr-sm-2" value="{{{changeref}}}">
+        </div>
+    </div>   
 
-        <div class="form-group row">
-            <label for="changeref" class="col-sm-2 col-form-label mb-2 mr-sm-2">Change Reference</label>
-            <div class="col-sm-4">
-                <input type="text" name="changeref" id="changeref" class="form-control mb-2 mr-sm-2" value="{{{changeref}}}">
-            </div>
-        </div>   
-
-        <div class="form-group row" size="5">
-            <label for="certtype" class="col-sm-2 col-form-label mb-2 mr-sm-2">Cert Type</label>
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label for="certtype" class="col-form-label mb-2 mr-sm-2">Cert Type</label>
+        </div>
+        <div class="col-sm-3">
             <select name = "certtype" id="certtype" selected = {{{listcerttypename}}}>
                 {{#each certlist}}
-                    <option value="{{listcerttypeid}}" option selected="" id="{{listcerttypename}}" size="35">{{listcerttypename}}</option>
+                    <option class="form-control mb-2 mr-sm-2" value="{{listcerttypeid}}" option selected="" id="{{listcerttypename}}">{{listcerttypename}}</option>
                 {{/each}}
             </select>
         </div>
+    </div>
 
-        <script type="text/javascript">
-        document.getElementById("{{certtypename}}").selected = "Selected";
-        </script>
+    <script type="text/javascript">
+    document.getElementById("{{certtypename}}").selected = "Selected";
+    </script>
 
-        <div class="form-inline">
-            <label for="date3" class="col-sm-0 col-form-label mb-2 mr-sm-2">Issue Date</label>
-            <div class="form-inline col-sm-3">
-                <input type="date" name="start_date" id="date" class="form-control mb-2 mr-sm-2" value="{{{sdate}}}">
-            </div>
-            <label for="expiry_date" class="col-sm-0 col-form-label mb-2 mr-sm-2">Expiry Date</label>
-            <div class="form-inline col-sm-2">
+    <div class="form-inline row">
+        <div class="col-sm-2">
+            <label for="date3" class="col-form-label mb-2 mr-sm-2 float-left">Issue Date</label>
+        </div>
+        <div class="col-sm-3">
+            <input type="date" name="start_date" id="date" class="form-control mb-2 mr-sm-2" value="{{{sdate}}}">
+        </div>
+        <div class="col-sm-1">
+            <label for="name" class="col-form-label mb-2 mr-sm-2">Expiry Date</label>
+        </div>
+        <div class="col-sm-3">
                 <input type="date" name="expiry_date" id="expiry_date" class="form-control mb-2 mr-sm-2" value="{{{edate}}}">
-            </div>
         </div>
+    </div>
         
-        <br>
+
         <div class="form-group row">
-            <label for="leadtime" class="col-sm-2 col-form-label mb-2 mr-sm-2">Lead Time Days </label>
-            <div class="col-sm-0">
-                <input type="text" name="leadtime" id="leadtime" class="form-control mb-1" size=2px value="{{{leadTime}}}">
-            </div>
+        <div class="col-sm-2">
+            <label for="leadtime" class="col-form-label mb-2 mr-sm-2">Lead Time</label>
+        </div>
+        <div class="col-sm-1">
+            <input type="text" name="leadtime" id="leadtime" class="form-control mb-1" size=2px value="{{{leadTime}}}">
+        </div>
         </div>
 
-        <div class="form-inline">
-            <label for="certRevoked" class="col-sm-0 col-form-label mb-2 mr-sm-2">Revoked</label>
-            <div class="form-inline col-sm-1">
+        <div class="form-inline row">
+            <div class="col-sm-2">
+                <label for="certRevoked" class="col-sm-0 col-form-label mb-2 mr-sm-2 float-left">Revoked</label>
+            </div>
+            <div class="col-sm-1">
                 <input type="checkbox" name = "certRevoked" id="certRevoked" value="checked" onClick = "JavaScript:toggleVisibility(this,'certRevokedDate');" {{{certRevoked}}}>
             </div>
                 <input type="date" name="certRevokedDate" id="certRevokedDate" class="form-control mb-1" value="{{{certRevokedDate}}}"><br>
         </div>
-    <br>
-        <div class="form-inline">
-            <label for="name" class="col-sm-0 col-form-label mb-2 mr-sm-2">Cert file:</label>
+        <div class="form-inline row">
+            <div class="col-sm-2">
+                <label for="name" class="col-form-label mb-2 mr-sm-2 float-left">Cert file:</label>
+            </div>
             <div class="col-sm-3">
                 <input type="text" name="currentCertFile" id="currentCertFile" class="" value="{{{certfile}}}" />
             </div>    
                 <input type="file" name="newcertfile" id="newcertfile" class="">
         </div>
 
-        <div class="form-group row">
-            <label for="changeref" class="col-sm-2 col-form-label mb-2 mr-sm-2">Project</label>
-            <div class="col-sm-3">
-                <input type="text" name="contact" id="contact" class="form-control mb-2 mr-sm-2" readonly value="{{{projectname}}}">
+        <div class="form-inline row">
+            <div class="col-sm-2">
+            <label for="implemented" class="col-sm-0 col-form-label mb-2 mr-sm-2 float-left">Implemented</label>
             </div>
-        </div>   
-
-        <div class="form-group row">
-            <label for="changeref" class="col-sm-2 col-form-label mb-2 mr-sm-2">Contact</label>
-            <div class="col-sm-3">
-                <input type="text" name="contact" id="contact" class="form-control mb-2 mr-sm-2" readonly value="{{{userEmail}}}">
-            </div>
-        </div>   
-
-        <div class="form-inline">
-            <label for="implemented" class="col-sm-0 col-form-label mb-2 mr-sm-2">Implemented</label>
             <div class="form-inline col-sm-1">
                 <input type="checkbox" name = "implemented" id="implemented" value="checked" {{{implemented}}}>
             </div>
