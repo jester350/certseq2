@@ -14,7 +14,9 @@ router.route("/").all(ctrlCerts.certsGetAll);
 router.route("/addcert").get(ctrlCerts.certAddOne);
 router.route("/postcert").post(ctrlCerts.certPost);
 router.route("/record:certId").get(ctrlCerts.certsGetOne);
-router.route("/updateCert").post(ctrlCerts.certUpdate);
+router.route("/record:certId").post(ctrlCerts.certUpdate);
+
+//router.route("/updateCert").post(ctrlCerts.certUpdate);
 router.route("/filter").post(ctrlCerts.certsGetAll);
 
 router.use(function(req, res) {
