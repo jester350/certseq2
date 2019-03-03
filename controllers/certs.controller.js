@@ -269,9 +269,11 @@ module.exports.certAddOne = function (request, response, next) {
         Promise.all([
             runsql2('SELECT id as deviceid, name as devicename from devices'),
             runsql2('SELECT id as Id,email as userEmail from users'),
-            runsql2('SELECT id as projectid, name as projectname from projects')
+            runsql2('SELECT id as projectid, name as projectname from projects'),
+            runsql2('SELECT id as listcertTypeId, name as listcertTypeName from cert_types')
+            
         ])
-        .then((result) => response.render('addCert', { devices: result[0],userlist:result[1], projects:result[2], title: 'Add Cert' }))
+        .then((result) => response.render('addCert', { devices: result[0],userlist:result[1], projects:result[2], certlist: result[3],title: 'Add Cert' }))
         .catch((err) => console.log(err))
     } else {
         console.log("user not logged in")

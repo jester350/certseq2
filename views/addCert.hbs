@@ -1,12 +1,4 @@
 
-<div class="container jf-form">
-<form data-licenseKey="" name="jqueryform-4d4fe5" id="jqueryform-4d4fe5" action='postcert' method='post' enctype='multipart/form-data' novalidate autocomplete="on">
-<input type="hidden" name="method" value="validateForm">
-<input type="hidden" id="serverValidationFields" name="serverValidationFields" value="">
-
-
-
-<div class="form-group f2 required" data-fid="f2">
   
 </div>
 
@@ -33,34 +25,88 @@
             <input type="text" name="commonname" id="commonname" class="form-control mb-2 mr-sm-2">
         </div>
     </div>
-    
-    <label for="changeref">Change Reference</label>
-    <input type="text" name="changeref" id="changeref"><br>
 
-    <label for="name">Cert Type</label>
-    <select name = "certtype">
-        <option value="1">CER</option>
-        <option value="2">CER/P7B</option>
-        <option value="3">CLIENT</option>
-        <option value="4">DUAL</option>
-        <option value="5">P7B</option>
-    </select><br>
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label for="changeref" class="col-form-label mb-2 mr-sm-2">Change Ref</label>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" name="changeref" id="changeref" class="form-control mb-2 mr-sm-2">
+        </div>
+    </div>
 
-    <label for="date4">Expiry Date:</label>
-    <input type="date" name="expiry_date" id="date2"><br>
-    
 
-    <label for="leadtime">Lead Time</label>
-    <input type="number" name="leadtime" id="leadtime"><br>
 
-    <div class="form-group certproj " data-fid="certproj">
+
+
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label for="certtype" class="col-form-label mb-2 mr-sm-2">Cert Type</label>
+        </div>
+        <div class="col-sm-3">
+            <select name = "certtype" id="certtype" selected = {{{listcerttypename}}}>
+                {{#each certlist}}
+                    <option class="form-control mb-2 mr-sm-2" value="{{listcerttypeid}}" option selected="" id="{{listcerttypename}}">{{listcerttypename}}</option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-inline row">
+        <div class="col-sm-2">
+            <label for="issue_date" class="col-form-label mb-2 mr-sm-2 float-left">Issue Date</label>
+        </div>
+        <div class="col-sm-3">
+            <input type="date" name="issue_date" id="date" class="form-control mb-2 mr-sm-2">
+        </div>
+        <div class="col-sm-1">
+            <label for="expiry_date" class="col-form-label mb-2 mr-sm-2">Expiry Date</label>
+        </div>
+        <div class="col-sm-3">
+                <input type="date" name="expiry_date" id="expiry_date" class="form-control mb-2 mr-sm-2">
+        </div>
+    </div>
+  
+        <div class="form-group row">
+        <div class="col-sm-2">
+            <label for="leadtime" class="col-form-label mb-2 mr-sm-2">Lead Time</label>
+        </div>
+        <div class="col-sm-1">
+            <input type="number" name="leadtime" id="leadtime" class="form-control mb-1" size=2px value="{{{leadTime}}}">
+        </div>
+        </div>
+
+        <div class="form-inline row">
+            <div class="col-sm-2">
+                <label for="name" class="col-form-label mb-2 mr-sm-2 float-left">Cert file:</label>
+            </div>
+            <div class="col-sm-3">
+                <input type="text" name="currentCertFile" id="currentCertFile" class="" value="{{{certfile}}}" />
+            </div>    
+                <input type="file" name="newcertfile" id="newcertfile" class="">
+        </div>
+
+        <div class="form-group row">
+        <div class="col-sm-2">
       <label class="control-label" for="certproj">Project</label>
-      <select id="certproj" name="certproj">
+      </div>
+      <div class="col-sm-1">
+      <select id="certproj" name="certproj" >
         {{#each projects}}
-          <option value="{{projectid}}">{{projectname}}</option>
+          <option value="{{projectid}}" class="form-control mb-1">{{projectname}}</option>
         {{/each}}
       </select>
     </div>
+    </div>
+
+
+
+<div class="container jf-form">
+<form data-licenseKey="" name="jqueryform-4d4fe5" id="jqueryform-4d4fe5" action='postcert' method='post' enctype='multipart/form-data' novalidate autocomplete="on">
+<input type="hidden" name="method" value="validateForm">
+<input type="hidden" id="serverValidationFields" name="serverValidationFields" value="">
+<div class="form-group f2 required" data-fid="f2">
+
 
 <div class="form-group certdevice " data-fid="certdevice">
   <label class="control-label" for="certdevice">Device</label>
@@ -69,13 +115,12 @@
         <option value="{{deviceid}}">{{devicename}}</option>
       {{/each}}
 </select>
-</div>
+</div></div></div>
 
 
 
 
 
-    <input type="file" name="theFile" />
     <br><input type="submit" value='Submit'>
 </form>
 </script>
