@@ -13,11 +13,27 @@
 <div class = "row">
 <div class = "col-md-1"></div>
 <div class = "col-md-10">
+
 <form action="postcert" method="post" name="addcert" id="addcert" encType="multipart/form-data">
-    <label for="name">Cert Name</label>
-    <input type="text" name="name" id="name"><br>
-    <label for="commonname">Common Name</label>
-    <input type="text" name="commonname" id="commonname"><br>
+
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label for="certname" class="col-form-label mb-2 mr-sm-2">Cert name</label>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" name="certname" id="certname" class="form-control mb-2 mr-sm-2">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label for="commanname" class="col-form-label mb-2 mr-sm-2">Common name</label>
+        </div>
+        <div class="col-sm-3">
+            <input type="text" name="commonname" id="commonname" class="form-control mb-2 mr-sm-2">
+        </div>
+    </div>
+    
     <label for="changeref">Change Reference</label>
     <input type="text" name="changeref" id="changeref"><br>
 
@@ -32,6 +48,7 @@
 
     <label for="date4">Expiry Date:</label>
     <input type="date" name="expiry_date" id="date2"><br>
+    
 
     <label for="leadtime">Lead Time</label>
     <input type="number" name="leadtime" id="leadtime"><br>
