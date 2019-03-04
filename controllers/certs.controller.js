@@ -333,7 +333,7 @@ module.exports.certPost = function (request, response, next) {
 
     if (request.session.user && request.cookies.user_sid) {
         certFileName="";
-        let certFile = request.files.theFile;
+        let certFile = request.files.newcertfile;
         if (certFile) {console.log("file upload details : "+certFile.name)
         certFile.mv(appRoot+'/uploads/'+certFile.name, function(err) {
             if (err)
