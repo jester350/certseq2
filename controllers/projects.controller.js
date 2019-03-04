@@ -73,7 +73,7 @@ module.exports.listall = function (request, response, next) {
             recordDetails = {totalRecords: result[0].length,recPerPage: count,pageCount: Math.ceil(result[0].length/count),currentPage: offset,pagerStart: pagerStart};
             console.log(recordDetails);
             response
-                .render('listProjects', { data: result[0].slice(offset,offset+count),recordDetails: recordDetails,userlist: result[1], title: 'List Projects' ,uname: username, accessLvl: accessLvl,projectfilter: projectfilter,emailfilter: emailfilter});
+                .render('listProjects', { data: result[0].slice(offset,offset+count),recordDetails: recordDetails,userlist: result[1], title: 'Cert Database : Projects' ,uname: username, accessLvl: accessLvl,projectfilter: projectfilter,emailfilter: emailfilter});
 
         })
     } else {

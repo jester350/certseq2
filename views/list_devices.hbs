@@ -69,11 +69,6 @@ txt += "The node value: " + x.nodeValue + "<br>";
         <thead>
             <tr>
                 <th>Device&nbsp;Name.</th>
-                <th>Project</th>
-                <th>Device</th>
-                <th>Start Date</th>
-                <th>Expiry Date</th>
-                <th>Days till Expiry</th>
             </tr>
         </thead>
         <thead>
@@ -81,14 +76,8 @@ txt += "The node value: " + x.nodeValue + "<br>";
 
             <tr>
                 <th>
-                    <input type="text" name="certFilter" value="{{certfilter}}">
-                </th>
-                <th>
-                    <input type="text" name="projectFilter" value="{{projectfilter}}">
-                </th>
-                <th>
                     <input type="text" name="deviceFilter" value="">
-                    <input type="submit" value="Sendit"></th>
+                    <input type="submit" value="Filter"></th>
             </tr>
         </form>
         </thead>
@@ -98,7 +87,7 @@ txt += "The node value: " + x.nodeValue + "<br>";
                 <td><a id = "devicename"  href="/devices/record{{devicesId}}">{{devicesName}}</a></td>
                 <td>{{{systemname}}}</td>
                 <td><a id = "contact"  href="/users/record{{rowid}}">{{useremail}}</a></td>
-                <td>{{{certstartdate}}}</td>
+                <td>{{{certissueDate}}}</td>
                 <td>{{{certexpirydate}}}</td>
                 <td>{{{daysleft}}}</td>
                 {{!-- TODO: search employee name --}}

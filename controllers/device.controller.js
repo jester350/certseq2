@@ -132,7 +132,7 @@ module.exports.listAllDevices = function (request, response, next) {
         recordDetails = {totalRecords: devicelist.length,recPerPage: count,pageCount: Math.ceil(devicelist.length/count),currentPage: offset,pagerStart: pagerStart};
         console.log(recordDetails);
         response
-            .render('list_devices', { data: devicelist.slice(offset,offset+count), recordDetails: recordDetails, title: 'Cert Database' ,uname: username, accessLvl: accessLvl,devicefilter: devicefilter,projectfilter: projectfilter});
+            .render('list_devices', { data: devicelist.slice(offset,offset+count), recordDetails: recordDetails, title: 'Cert Database : Devices' ,uname: username, accessLvl: accessLvl,devicefilter: devicefilter,projectfilter: projectfilter});
     
         console.log("Second handler", data);
       })

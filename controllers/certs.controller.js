@@ -47,7 +47,7 @@ module.exports.certsGetAll = function (request, response, next) {
         console.log("request query set to : "+request.query);
         console.log("first query vars : "+certfilter+" : "+request.query.certfilter);
 
-        squery = 'select "certs"."id" as "certId","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."implemented" as "certimplemented","certs"."changeRef" as "certChangeRef","certs"."start_date" as "certStartDate","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certType","certs"."revokedDate" as "certRevokedDate", \
+        squery = 'select "certs"."id" as "certId","certs"."name" as "certName", "certs"."issue_date" as "certIssueDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."implemented" as "certimplemented","certs"."changeRef" as "certChangeRef","certs"."issue_date" as "certissueDate","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certType","certs"."revokedDate" as "certRevokedDate", \
             "project"."name" as "projectName", "project"."id" as "projectId","user"."email" as "userEmail" \
             from "certs" \
             inner join "projects" as "project" on "project"."id" = "certs"."project" \
@@ -85,9 +85,9 @@ module.exports.certsGetAll = function (request, response, next) {
                                 class_type = "alert alert-danger";
                             }
                             res.rows[i].classtype=class_type;
-                            sdate = date.format(res.rows[i].certStartDate, 'DD-MM-YYYY');
-                            console.log(sdate)
-                            res.rows[i].certStartDate = sdate;
+                            idate = date.format(res.rows[i].certIssueDate, 'DD-MM-YYYY');
+                            //console.log(idate)
+                            res.rows[i].certissueDate = idate;
 
                             edate = date.format(res.rows[i].certExpiryDate, 'DD-MM-YYYY');
                             res.rows[i].certExpiryDate = edate;
@@ -165,7 +165,7 @@ module.exports.certsGetOne = function (request, response, next) {
         get_project_list = 'SELECT id as projectid, name as projectname from projects';
         get_device_list = 'SELECT id as deviceid, name as devicename from devices';
         get_cert_type_list = 'SELECT id as listcertTypeId, name as listcertTypeName from cert_types';
-        get_all_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."implemented" as "certimplemented","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
+        get_all_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."issue_date" as "certissueDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."implemented" as "certimplemented","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
         "project"."name" as "projectname","user"."name" as "userName","user"."email" as "userEmail", \
         "certtype"."name" as "certtypename" \
         from "certs" \
@@ -173,7 +173,7 @@ module.exports.certsGetOne = function (request, response, next) {
         inner join "cert_types" as "certtype" on "certtype"."id" = "certs"."type" \
         LEFT OUTER JOIN "users" AS "user" ON "project"."userId" = "user"."id" \
         WHERE "certs"."id" = '+find_cert_id
-        get_devices_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."start_date" as "certStartDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."implemented" as "certimplemented","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
+        get_devices_squery = 'select "certs"."id" as "certid","certs"."name" as "certName", "certs"."issue_date" as "certissueDate","certs"."expiry_date" as "certExpiryDate","certs"."cert_file" as "certFile","certs"."revoked" as "certRevoked","certs"."implemented" as "certimplemented","certs"."changeRef" as "certChangeRef","certs"."commonName" as "certCommonName","certs"."leadTime" as "certLeadTime","certs"."type" as "certTypeId","certs"."revokedDate" as "certRevokedDate", \
         "project"."name" as "projectname","user"."name" as "userName","user"."email" as "userEmail", \
         "certtype"."name" as "certtypename", \
         "devices"."name" as "deviceName", "devices"."id" as "deviceid" \
@@ -208,7 +208,7 @@ module.exports.certsGetOne = function (request, response, next) {
             var certname = certDetails[0].certName;
             var today = new Date();
             var projectname = certDetails[0].projectname;
-            var sdate = date.format(certDetails[0].certStartDate, 'YYYY-MM-DD');
+            var idate = date.format(certDetails[0].certissueDate, 'YYYY-MM-DD');
             var edate = date.format(certDetails[0].certExpiryDate, 'YYYY-MM-DD');
             var daysLeft = date.subtract(certDetails[0].certExpiryDate, today).toDays();
             var contact = certDetails[0].userName
@@ -239,7 +239,7 @@ module.exports.certsGetOne = function (request, response, next) {
             console.log("project : "+projectname);
             console.log("render one cert")
             response
-                .render('getCert', { data: certDetails, certdevices: certdevices, userEmail: userEmail,certlist: certtypes, certtype: certtype,certtypename: certtypename, projectname: projectname, projects: projects,revokedVis: revokedVis,implemented: implemented,devices: filteredDeviceList, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact, sdate: sdate, edate: edate, projectname: projectname, dleft: daysLeft,certfile: certfile,certid: find_cert_id,accessLvl: accessLvl });
+                .render('getCert', { data: certDetails, certdevices: certdevices, userEmail: userEmail,certlist: certtypes, certtype: certtype,certtypename: certtypename, projectname: projectname, projects: projects,revokedVis: revokedVis,implemented: implemented,devices: filteredDeviceList, title: 'Certificate: '+certname, changeref: changeref, commonName: commonName, leadTime: leadTime,certname: certname,certRevoked: certRevoked, certRevokedDate: certRevokedDate, contact: contact, idate: idate, edate: edate, projectname: projectname, dleft: daysLeft,certfile: certfile,certid: find_cert_id,accessLvl: accessLvl });
         
             console.log("Second handler", data);
         })
@@ -301,17 +301,17 @@ module.exports.certPost = function (request, response, next) {
         console.log("body");
         var today = new Date();
         deviceid = body.certdevice;
-        const { name, commonname, changeref, certtype, start_date, expiry_date, leadtime, certproj } = body;
+        const { certname, commonname, changeref, certtype, issue_date, expiry_date, leadtime, certproj } = body;
         for (var i in deviceid) {
             console.log(deviceid[i]);
         }
-        console.log("device : "+name)
+        console.log("device : "+certname)
         return new Promise(function (resolve, reject) {
-            pool.query('INSERT INTO certs(name,"commonName","changeRef",type, expiry_date,start_date,cert_file,"leadTime","project") VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-                [name, commonname, changeref,certtype, expiry_date, start_date,certFileName,leadtime,certproj],
+            pool.query('INSERT INTO certs(name,"commonName","changeRef",type, expiry_date,issue_date,cert_file,"leadTime","project") VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+                [certname, commonname, changeref,certtype, expiry_date, issue_date,certFileName,leadtime,certproj],
                 (err, res) => {
                     if (err) return next(err);
-                    resolve(name);
+                    resolve(certname);
                     // response.redirect('/certs');
                 }
             )
@@ -409,8 +409,8 @@ module.exports.certUpdate = function (request, response, next) {
     console.log("body");
     var today = new Date();
 
-    //const { certid,name, created_date, expiry_date, start_date, device,currentCertFile,certdevicejuncid } = request.body;
-    const { certid,certRevoked,certtype,changeref,commonname,expiry_date,leadtime,start_date,currentCertFile,certdevice,deldevice,implemented } = request.body;
+    //const { certid,name, created_date, expiry_date, issue_date, device,currentCertFile,certdevicejuncid } = request.body;
+    const { certid,certRevoked,certtype,changeref,commonname,expiry_date,leadtime,issue_date,currentCertFile,certdevice,deldevice,implemented } = request.body;
     var usethisfilename = currentCertFile;
     if (request.body.certRevokedDate) {
         var certRevokedDate = request.body.certRevokedDate
@@ -457,8 +457,8 @@ module.exports.certUpdate = function (request, response, next) {
     return new Promise(function (resolve, reject) {
         console.log("lets do an update ");
         console.log("file name : "+usethisfilename);
-        // pool.query('UPDATE certx SET name = $2, created_date = $3, expiry_date = $4, start_date = $5, cert_file = $6 where row_id = $1',[certid,name, created_date, expiry_date, start_date, usethisfilename],(err, res) => {
-        pool.query('UPDATE certs SET expiry_date = $7, start_date = $9, cert_file = $10, revoked = $2, "revokedDate" = $3, type=$4,"changeRef" = $5, "commonName" = $6, "leadTime" = $8,"implemented" = $11 where certs.id = $1',[certid,certRevoked, certRevokedDate, certtype, changeref,commonname,expiry_date,leadtime,start_date, usethisfilename,implemented],(err, res) => {
+        // pool.query('UPDATE certx SET name = $2, created_date = $3, expiry_date = $4, issue_date = $5, cert_file = $6 where row_id = $1',[certid,name, created_date, expiry_date, issue_date, usethisfilename],(err, res) => {
+        pool.query('UPDATE certs SET expiry_date = $7, issue_date = $9, cert_file = $10, revoked = $2, "revokedDate" = $3, type=$4,"changeRef" = $5, "commonName" = $6, "leadTime" = $8,"implemented" = $11 where certs.id = $1',[certid,certRevoked, certRevokedDate, certtype, changeref,commonname,expiry_date,leadtime,issue_date, usethisfilename,implemented],(err, res) => {
             if (err) return next(err);
             //console.log("************** cert id : "+certid);
             //console.log("************** device id : "+device);
