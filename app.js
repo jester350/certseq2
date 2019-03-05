@@ -17,6 +17,8 @@ var cron = require('./bin/cron');
 var fs = require('fs');
 var select2 = require('select2');
 var favicon = require('express-favicon');
+var { body,validationResult } = require('express-validator/check');
+var { sanitizeBody } = require('express-validator/filter');
 
 
 // var indexRouter = require('./routes/index');
