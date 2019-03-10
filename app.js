@@ -110,7 +110,7 @@ var path = require('path');
 
 //Load the docx file as a binary
 var content = fs
-    .readFileSync(path.resolve(__dirname, 'tag-example.doc'), 'binary');
+    .readFileSync(path.resolve(__dirname, 'doc4.docx'), 'binary');
 
 var zip = new JSZip(content);
 
@@ -146,7 +146,7 @@ var buf = doc.getZip()
 
 // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
 fs.writeFileSync(path.resolve(__dirname, 'tag-example2.docx'), buf);
-
+console.log("done doc")
 
 app.use(session({
     // name: 'certdb@bpdts.com',
