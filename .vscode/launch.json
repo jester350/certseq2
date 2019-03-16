@@ -10,6 +10,7 @@
             "name": "Attach to Port",
             "address": "127.0.0.1",
             "port": 9229,
+            "restart": true,
             "protocol": "inspector"
           },
           {
