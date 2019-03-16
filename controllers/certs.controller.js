@@ -278,6 +278,9 @@ module.exports.certsGetOne = function (request, response, next) {
             var idate = date.format(certDetails[0].certissueDate, 'YYYY-MM-DD');
             var edate = date.format(certDetails[0].certExpiryDate, 'YYYY-MM-DD');
             var daysLeft = date.subtract(certDetails[0].certExpiryDate, today).toDays();
+            var reminderDate = new Date();
+            reminderDate.setDate(certDetails[0].certExpiryDate.getDate()-certDetails[0].certLeadTime);
+            // var issueReminderDate = date.subtract(certDetails[0].certExpiryDate, certDetails[0].certLeadTime);
             var contact = certDetails[0].userName
             var changeref = certDetails[0].certChangeRef;
             var commonName = certDetails[0].certCommonName;
