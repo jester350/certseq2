@@ -10,7 +10,71 @@ module.exports.certsGetAll = function (request, response, next) {
     console.log("body response");
 
 
+    function writedoc() {
+        var JSZip = require('jszip');
+var Docxtemplater = require('docxtemplater');
 
+var fs = require('fs');
+var path = require('path');
+
+//Load the docx file as a binary
+var content = fs
+    .readFileSync(path.resolve(__dirname, 'template5.docx'), 'binary');
+
+var zip = new JSZip(content);
+
+var doc = new Docxtemplater();
+doc.loadZip(zip);
+
+//set the templateVariables
+doc.setData({
+    requestors_name: 'John Doe',
+    application: 'Skynet',
+    change_number: 'CHG00001',
+    change_start_date: '04/08/2019 20:00',
+    change_end_date: '08/08/2019 23:00',
+    cert_type_1: 'Router',
+    cert_type_2: 'CER',
+    project_owner: 'Miles Dyson',
+    key_role: 'Chief Scientist',
+    business_unit: 'Cyberdyne',
+    requestors_email: 'me@me.com',
+    requestors_name: 'Miles Dyson',
+    "servers": [
+        {server_name: 'T800'},
+        {server_name: 'T850'},
+        {server_name: 'T1000'}
+    ],
+    common_name: 'CN100000',
+    key_database: 'DB2',
+    key_label: 'T-Label',
+    encryption_level: 'SHA1'
+});
+
+try {
+    // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+    doc.render()
+}
+catch (error) {
+    var e = {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+        properties: error.properties,
+    }
+    console.log(JSON.stringify({error: e}));
+    // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+    throw error;
+}
+
+var buf = doc.getZip()
+            .generate({type: 'nodebuffer'});
+
+// buf is a nodejs buffer, you can either write it to a file or do anything else with it.
+fs.writeFileSync(path.resolve(__dirname, 'tag-example2.docx'), buf);
+console.log("done doc")
+
+}
 
     console.log(response.body);
     function countrec() {
@@ -120,6 +184,7 @@ module.exports.certsGetAll = function (request, response, next) {
     if (request.session.user && request.cookies.user_sid) {
         rowcount=countrec();
         console.log("row count"+rowcount);
+        writedoc();
         readdb().then((rowid) => {
         console.log(rowid)//Value here is defined as u expect.
         });
@@ -333,11 +398,12 @@ module.exports.certPost = function (request, response, next) {
             business_unit: 'Cyberdyne',
             requestors_email: 'me@me.com',
             requestors_name: 'Miles Dyson',
-            "servers": [{
-                "server_name":"T800",
+            servers: [{
+                server_name: 'T800',
             },{
-                "server_name":"T850",
-            },{"server_name":"T1000",
+                server_name: 'T850',
+            },{
+                server_name: 'T1000',
             }],
             common_name: 'CN100000',
             key_database: 'DB2',
@@ -368,7 +434,7 @@ module.exports.certPost = function (request, response, next) {
         fs.writeFileSync(path.resolve(__dirname, 'tag-example2.docx'), buf);
         console.log("done doc")
 
-            }
+    }
 
     function insertcert(body) {
         console.log("insert command");
