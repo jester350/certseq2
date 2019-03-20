@@ -397,16 +397,19 @@ module.exports.certPost = function (request, response, next) {
         device_names=[];
         for (var i in body.certdevice) {
             console.log(body.certdevice[i]);
-            get_device_name_sql = 'SELECT name as devicename from devices where id = '+body.certdevice[i];
+            get_device_name_sql = 'SELECT name as devicename from devices where id = '+body.certdevice[i]
+            get_device_name_sql = 'select * from devices'
             return new Promise(function (resolve, reject) {
-            pool.query(get_device_name_sql, (err, res) => {     
-                console.log("sql result")   
-                console.log(res)
-            response
-                device_names[i]=res
+                pool.query(get_device_name_sql,
+                    (err, res) => {
+                        if (err) return next(err);
+                        resolve(res.rows);
+                        console.log(res.rows)
+                        // response.redirect('/certs');
+                    }
+                )
             })
-            })
-        }
+        };
 
         
 
