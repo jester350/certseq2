@@ -184,7 +184,7 @@ console.log("done doc")
     if (request.session.user && request.cookies.user_sid) {
         rowcount=countrec();
         console.log("row count"+rowcount);
-        writedoc();
+        // writedoc();
         readdb().then((rowid) => {
         console.log(rowid)//Value here is defined as u expect.
         });
@@ -368,6 +368,17 @@ module.exports.certPost_upload_working = function(req,res,next){
 
 module.exports.certPost = function (request, response, next) {
 
+    function runsql2 (sqlquery) {
+        return new Promise((resolve, reject) => {
+            pool.query(sqlquery, (err, res) => {
+            if (err) {
+              return reject (err)
+            }
+            resolve(res.rows)
+          })
+        })
+    }
+
     function writedoc(body) {
                 var JSZip = require('jszip');
         var Docxtemplater = require('docxtemplater');
@@ -377,34 +388,49 @@ module.exports.certPost = function (request, response, next) {
 
         //Load the docx file as a binary
         var content = fs
-            .readFileSync(path.resolve(__dirname, 'template3.docx'), 'binary');
+            .readFileSync(path.resolve(__dirname, 'template5.docx'), 'binary');
 
         var zip = new JSZip(content);
 
         var doc = new Docxtemplater();
         doc.loadZip(zip);
+        device_names=[];
+        for (var i in body.certdevice) {
+            console.log(body.certdevice[i]);
+            get_device_name_sql = 'SELECT name as devicename from devices where id = '+body.certdevice[i];
+            return new Promise(function (resolve, reject) {
+            pool.query(get_device_name_sql, (err, res) => {     
+                console.log("sql result")   
+                console.log(res)
+            response
+                device_names[i]=res
+            })
+            })
+        }
 
+        
+
+        server_list = [{
+            server_name: 'T800',
+        },{
+            server_name: 'T850',
+        },{
+            server_name: 'T1000',
+        }];
         //set the templateVariables
         doc.setData({
-            requestors_name: 'John Doe',
             application: 'Skynet',
             change_number: 'CHG00001',
             change_start_date: '04/08/2019 20:00',
             change_end_date: '08/08/2019 23:00',
-            cert_type_1: 'Router',
-            cert_type_2: 'CER',
+            cert_type_1: body.certtype,
+            cert_type_2: body.certtype2,
             project_owner: 'Miles Dyson',
             key_role: 'Chief Scientist',
             business_unit: 'Cyberdyne',
             requestors_email: 'me@me.com',
-            requestors_name: 'Miles Dyson',
-            servers: [{
-                server_name: 'T800',
-            },{
-                server_name: 'T850',
-            },{
-                server_name: 'T1000',
-            }],
+            requestors_name: body.reqname,
+            servers: server_list,
             common_name: 'CN100000',
             key_database: 'DB2',
             key_label: 'T-Label',
@@ -431,7 +457,7 @@ module.exports.certPost = function (request, response, next) {
                     .generate({type: 'nodebuffer'});
 
         // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-        fs.writeFileSync(path.resolve(__dirname, 'tag-example2.docx'), buf);
+        fs.writeFileSync(path.resolve(__dirname, 'tag-example5.docx'), buf);
         console.log("done doc")
 
     }
