@@ -321,29 +321,28 @@ module.exports.certPost = function (request, response, next) {
 
         //set the templateVariables
         doc.setData({
-            first_name: 'John',
-            last_name: 'Doe',
-            phone: '0652455478',
-            description: 'New Website',
-            reqName: 'John Doe',
-            project: 'CAM',
-            application: 'CAMLite',
-            changeNumber: 'CHG123456',
-            startDate: '03/05/2019',
-            endDate: '06/07/2045',
-            owner_email: 'me@me.com',
-            owner_role: 'Del lead',
-            business_unit: 'test unit',
-            implementer_email: 'bob@home.com',
-            key_support_name: 'john doe',
-            "certs": [{
-                "certName":"cert1",
-                "serverName":"server 1"
+            requestors_name: 'John Doe',
+            application: 'Skynet',
+            change_number: 'CHG00001',
+            change_start_date: '04/08/2019 20:00',
+            change_end_date: '08/08/2019 23:00',
+            cert_type_1: 'Router',
+            cert_type_2: 'CER',
+            project_owner: 'Miles Dyson',
+            key_role: 'Chief Scientist',
+            business_unit: 'Cyberdyne',
+            requestors_email: 'me@me.com',
+            requestors_name: 'Miles Dyson',
+            "servers": [{
+                "server_name":"T800",
             },{
-                "certName":"cert2",
-                "serverName":"server 2"
-        }]
-
+                "server_name":"T850",
+            },{"server_name":"T1000",
+            }],
+            common_name: 'CN100000',
+            key_database: 'DB2',
+            key_label: 'T-Label',
+            encryption_level: 'SHA1'
         });
 
         try {
