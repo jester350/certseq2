@@ -269,7 +269,7 @@ module.exports.certsGetOne = function (request, response, next) {
             certtypes=[]
             certdevices=[]
             certdetails=[]
-            proects=data[0]
+            projects=data[0]
             devices=data[1]
             certtypes=data[2]
             certDetails=data[3]
@@ -395,23 +395,40 @@ module.exports.certPost = function (request, response, next) {
         var doc = new Docxtemplater();
         doc.loadZip(zip);
         device_names=[];
-        for (var i in body.certdevice) {
-            console.log(body.certdevice[i]);
-            get_device_name_sql = 'SELECT name as devicename from devices where id = '+body.certdevice[i]
-            get_device_name_sql = 'select * from devices'
-            return new Promise(function (resolve, reject) {
-                pool.query(get_device_name_sql,
-                    (err, res) => {
-                        if (err) return next(err);
-                        resolve(res.rows);
-                        console.log(res.rows)
-                        // response.redirect('/certs');
-                    }
-                )
-            })
-        };
+get_device_name_sql = 'select * from devices where id = 18';
 
-        
+Promise.all([
+    runsql2('SELECT id as deviceidx, name as devicenamex from devices'),
+    runsql2('SELECT id as deviceidx, name as devicenamex from devices')  
+])
+.then(data => {
+    devices=[]
+    devices=data[0]
+    resolve.console.log(devices)
+    })
+.catch((err) => console.log(err));
+
+console.log("sone")
+
+        Promise.all ([
+        a=runsql2(get_device_name_sql)
+        ]) 
+            .then(a => console.log(a))
+            .catch((err) => console.log(err))
+
+        for (var i = 0; i < body.certdevice.length; i++) {
+
+            // console.log(body.certdevice[i]);
+            // get_device_name_sql = 'SELECT name as devicename from devices where id = '+body.certdevice[i]
+            get_device_name_sql = 'select * from devices where id = 17'
+            runsql2(get_device_name_sql)
+            .then((result) => console.log(result))
+            .catch((err) => console.log(err))
+           };
+
+
+           
+console.log("sql done")
 
         server_list = [{
             server_name: 'T800',
@@ -549,7 +566,8 @@ module.exports.certPost = function (request, response, next) {
 
             pool.query('select max(id) from certs', (err, res) => {
                 if (err) return next(err);
-                response.redirect('/certs');
+                certpage = '/certs/record'+res.rows[0].max;
+                response.redirect(certpage);
             })
         });
         // response.redirect('/certs');
