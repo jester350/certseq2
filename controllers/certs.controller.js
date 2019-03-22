@@ -377,7 +377,7 @@ module.exports.certPost = function (request, response, next) {
             resolve(res.rows)
           })
         })
-    }
+    };
 
     function writedoc(body) {
                 var JSZip = require('jszip');
@@ -480,7 +480,7 @@ console.log("sql done")
         fs.writeFileSync(path.resolve(__dirname, 'tag-example5.docx'), buf);
         console.log("done doc")
 
-    }
+    };
 
     function insertcert(body) {
         console.log("insert command");
@@ -656,4 +656,116 @@ module.exports.certUpdate = function (request, response, next) {
             response.redirect('/certs');
         })
     });
+};
+
+module.exports.certSendrequest = function (request, response, next) {
+
+    function runsql2 (sqlquery) {
+        return new Promise((resolve, reject) => {
+            pool.query(sqlquery, (err, res) => {
+            if (err) {
+              return reject (err)
+            }
+            resolve(res.rows)
+          })
+        })
+    };
+
+    
+
+    function createDoc(device_list,body) {
+        var JSZip = require('jszip');
+        var Docxtemplater = require('docxtemplater');
+        var fs = require('fs');
+        var path = require('path');
+
+        //Load the docx file as a binary
+        var content = fs
+            .readFileSync(path.resolve(__dirname, 'template5.docx'), 'binary');
+
+        var zip = new JSZip(content);
+        var doc = new Docxtemplater();
+        doc.loadZip(zip);
+
+        server_list2 = [{
+            devicename: 'T800',
+            },{
+                devicename: 'T850',
+            },{
+                devicename: 'T1000',
+        }];
+        var server_list = [];
+        //server_list = [{devicename: "test"}];
+
+        for(var i = 0; i < devices.length; i++) 
+        {
+            console.log(devices[i].devicename)
+            server_list.push({devicename : devices[i].devicename})
+        };
+        // server_list.push({devicename: "end of list"});
+        //set the templateVariables
+        doc.setData({
+            application: 'Skynet',
+            change_number: 'CHG00001',
+            change_start_date: '04/08/2019 20:00',
+            change_end_date: '08/08/2019 23:00',
+            cert_type_1: body.certtype,
+            cert_type_2: body.certtype2,
+            project_owner: 'Miles Dyson',
+            key_role: 'Chief Scientist',
+            business_unit: 'Cyberdyne',
+            requestors_email: 'me@me.com',
+            requestors_name: body.reqname,
+            certdevices: server_list,
+            common_name: 'CN100000',
+            key_database: 'DB2',
+            key_label: 'T-Label',
+            encryption_level: 'SHA1'
+        });
+
+        try {
+        // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+            doc.render()
+        }
+        catch (error) {
+            var e = {
+            message: error.message,
+            name: error.name,
+            stack: error.stack,
+            properties: error.properties,
+        }
+        console.log(JSON.stringify({error: e}));
+        // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+        throw error;
+        }
+
+        var buf = doc.getZip()
+        .generate({type: 'nodebuffer'});
+
+        // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
+        fs.writeFileSync(path.resolve(__dirname, 'tag-example5.docx'), buf);
+        console.log("done doc")
+
+    };
+
+    function test(doc,body) {
+        console.log("in test")
+        console.log(doc)
+        console.log(body)
+        console.log("leaving test")
+    }
+
+    console.log("SIGN REQUEST")
+
+    device_names=[];
+    get_device_name_sql = 'select name as devicename from devices where id = 18';
+
+    Promise.all([
+        runsql2('SELECT name as devicename from devices')
+    ])
+    .then((devices) => createDoc(devices,request.body))
+    .catch((err) => console.log(err));
+
+    console.log("doc edit done")
+    // console.log(request.body)
 };

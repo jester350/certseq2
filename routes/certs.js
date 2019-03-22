@@ -15,6 +15,7 @@ router.route("/addcert").get(ctrlCerts.certAddOne);
 router.route("/postcert").post(ctrlCerts.certPost);
 router.route("/record:certId").get(ctrlCerts.certsGetOne);
 router.route("/record:certId").post(ctrlCerts.certUpdate);
+router.route("/signrequest").post(ctrlCerts.certSendrequest);
 
 //router.route("/updateCert").post(ctrlCerts.certUpdate);
 router.route("/filter").post(ctrlCerts.certsGetAll);
