@@ -1,253 +1,226 @@
-
-  
 </div>
-
-<div class = "row">
-<div class = "col-md-1"></div>
-<div class = "col-md-10">
-
-<form action="postcert" method="post" name="addcert" id="addcert" encType="multipart/form-data">
-
-    <div class="form-group row">
-        <div class="col-sm-2">
-            <label for="reqname" class="col-form-label mb-2 mr-sm-2">Requestor name</label>
-        </div>
-        <div class="col-sm-3">
-            <input type="text" name="reqname" id="reqname" class="form-control mb-2 mr-sm-2">
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <div class="col-sm-2">
-            <label for="certname" class="col-form-label mb-2 mr-sm-2">Cert name</label>
-        </div>
-        <div class="col-sm-3">
-            <input type="text" name="certname" id="certname" class="form-control mb-2 mr-sm-2">
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <div class="col-sm-2">
-            <label for="commanname" class="col-form-label mb-2 mr-sm-2">Common name</label>
-        </div>
-        <div class="col-sm-3">
-            <input type="text" name="commonname" id="commonname" class="form-control mb-2 mr-sm-2">
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <div class="col-sm-2">
-            <label for="changeref" class="col-form-label mb-2 mr-sm-2">Change Ref</label>
-        </div>
-        <div class="col-sm-3">
-            <input type="text" name="changeref" id="changeref" class="form-control mb-2 mr-sm-2">
-        </div>
-    </div>
-
-        <div class="form-inline row">
-        <div class="col-sm-2">
-            <label for="change_start_date" class="col-form-label mb-2 mr-sm-2 float-left">Change start</label>
-        </div>
-        <div class="col-sm-3">
-            <input type="date" name="change_start_date" id="change_start_date" class="form-control mb-2 mr-sm-2">
-            <input type="time" name="change_start_time" id="change_start_time" class="form-control mb-2 mr-sm-2">
-        </div>
-        <div class="col-sm-1">
-            <label for="change_end_date" class="col-form-label mb-2 mr-sm-2">Change end</label>
-        </div>
-        <div class="col-sm-3">
-                <input type="date" name="change_end_date" id="change_end_date" class="form-control mb-2 mr-sm-2">
-                <input type="time" name="change_end_time" id="change_end_time" class="form-control mb-2 mr-sm-2">
-        </div>
-    </div>
-            
-
-    <div class="form-inline row">
-        <div class="col-sm-2">
-            <label for="implementer_name" class="col-form-label mb-2 mr-sm-2 float-left">Implementer Name</label>
-        </div>
-        <div class="col-sm-3">
-            <input type="text" name="implementer_name" id="changeref" class="form-control mb-2 mr-sm-2">
-        </div>
-
-        <div class="col-sm-2">
-            <label for="implementer_email" class="col-form-label mb-2 mr-sm-2">Implementer email</label>
-        </div>
-        <div class="col-sm-3">
-            <input type="text" name="implementer_email" id="changeref" class="form-control mb-2 mr-sm-2">
-        </div>
-    </div>
-
-
-    <div class="form-inline row">
-        <div class="col-sm-2">
-            <label for="certtype" class="col-form-label mb-2 mr-sm-2 float-left">Cert Type</label>
-        </div>
-        <div class="col-sm-3">
-            <select name = "certtype" id="certtype" selected = {{{listcerttypename}}} class="form-control mb-2 mr-sm-2">
-                {{#each certlist}}
-                    <option class="form-control mb-2 mr-sm-2" value="{{listcerttypeid}}" option selected="" id="{{listcerttypename}}">{{listcerttypename}}</option>
-                {{/each}}
-            </select>
-        </div>
-
-        <div class="col-sm-2">
-            <label for="certtype2" class="col-form-label mb-2 mr-sm-2 float-left">Cert Type</label>
-        </div>
-        <div class="col-sm-3">
-            <select name = "certtype2" id="certtype2" selected = {{{listcerttypename2}}} class="form-control mb-2 mr-sm-2">
-                {{#each certlist2}}
-                    <option class="form-control mb-2 mr-sm-2" value="{{listcerttypeid2}}" option selected="" id="{{listcerttypename2}}">{{listcerttypename2}}</option>
-                {{/each}}
-            </select>
-        </div>
-    </div>
-
-    <div class="form-inline row">
-        <div class="col-sm-2">
-            <label for="issue_date" class="col-form-label mb-2 mr-sm-2 float-left">Issue Date</label>
-        </div>
-        <div class="col-sm-3">
-            <input type="date" name="issue_date" id="date" class="form-control mb-2 mr-sm-2">
-        </div>
-        <div class="col-sm-1">
-            <label for="expiry_date" class="col-form-label mb-2 mr-sm-2">Expiry Date</label>
-        </div>
-        <div class="col-sm-3">
-                <input type="date" name="expiry_date" id="expiry_date" class="form-control mb-2 mr-sm-2">
-        </div>
-    </div>
-  
-        <div class="form-group row">
-        <div class="col-sm-2">
-            <label for="leadtime" class="col-form-label mb-2 mr-sm-2">Lead Time</label>
-        </div>
-        <div class="col-sm-1">
-            <input type="number" name="leadtime" id="leadtime" class="form-control mb-1" size=2px value="{{{leadTime}}}">
-        </div>
-        </div>
-
-        <div class="form-inline row">
-            <div class="col-sm-2">
-                <label for="name" class="col-form-label mb-2 mr-sm-2 float-left">Cert file:</label>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <form action="postcert" method="post" name="addcert" id="addcert" encType="multipart/form-data">
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label for="reqname" class="col-form-label mb-2 mr-sm-2">Requestor name</label>
+                </div>
+                <div class="col-sm-3">
+                    <input type="text" name="reqname" id="reqname" class="form-control mb-2 mr-sm-2">
+                </div>
             </div>
-            <div class="col-sm-3">
-                <input type="text" name="currentCertFile" id="currentCertFile" class="" value="{{{certfile}}}" />
-            </div>    
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label for="certname" class="col-form-label mb-2 mr-sm-2">Cert name</label>
+                </div>
+                <div class="col-sm-3">
+                    <input type="text" name="certname" id="certname" class="form-control mb-2 mr-sm-2">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label for="commanname" class="col-form-label mb-2 mr-sm-2">Common name</label>
+                </div>
+                <div class="col-sm-3">
+                    <input type="text" name="commonname" id="commonname" class="form-control mb-2 mr-sm-2">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label for="changeref" class="col-form-label mb-2 mr-sm-2">Change Ref</label>
+                </div>
+                <div class="col-sm-3">
+                    <input type="text" name="changeref" id="changeref" class="form-control mb-2 mr-sm-2">
+                </div>
+            </div>
+            <div class="form-inline row">
+                <div class="col-sm-2">
+                    <label for="change_start_date" class="col-form-label mb-2 mr-sm-2 float-left">Change start</label>
+                </div>
+                <div class="col-sm-3">
+                    <input type="date" name="change_start_date" id="change_start_date"
+                        class="form-control mb-2 mr-sm-2">
+                    <input type="time" name="change_start_time" id="change_start_time"
+                        class="form-control mb-2 mr-sm-2">
+                </div>
+                <div class="col-sm-1">
+                    <label for="change_end_date" class="col-form-label mb-2 mr-sm-2">Change end</label>
+                </div>
+                <div class="col-sm-3">
+                    <input type="date" name="change_end_date" id="change_end_date" class="form-control mb-2 mr-sm-2">
+                    <input type="time" name="change_end_time" id="change_end_time" class="form-control mb-2 mr-sm-2">
+                </div>
+            </div>
+            <div class="form-inline row">
+                <div class="col-sm-2">
+                    <label for="implementer_name" class="col-form-label mb-2 mr-sm-2 float-left">Implementer
+                        Name</label>
+                </div>
+                <div class="col-sm-3">
+                    <input type="text" name="implementer_name" id="changeref" class="form-control mb-2 mr-sm-2">
+                </div>
+                <div class="col-sm-2">
+                    <label for="implementer_email" class="col-form-label mb-2 mr-sm-2">Implementer email</label>
+                </div>
+                <div class="col-sm-3">
+                    <input type="text" name="implementer_email" id="changeref" class="form-control mb-2 mr-sm-2">
+                </div>
+            </div>
+            <div class="form-inline row">
+                <div class="col-sm-2">
+                    <label for="certtype" class="col-form-label mb-2 mr-sm-2 float-left">Cert Type</label>
+                </div>
+                <div class="col-sm-3">
+                    <select name="certtype" id="certtype" selected={{{listcerttypename}}}
+                        class="form-control mb-2 mr-sm-2">
+                        {{#each certlist}}
+                            <option class="form-control mb-2 mr-sm-2" value="{{listcerttypeid}}" option selected=""
+                                id="{{listcerttypename}}">{{listcerttypename}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="certtype2" class="col-form-label mb-2 mr-sm-2 float-left">Cert Type</label>
+                </div>
+                <div class="col-sm-3">
+                    <select name="certtype2" id="certtype2" selected={{{listcerttypename2}}}
+                        class="form-control mb-2 mr-sm-2">
+                        {{#each certlist2}}
+                            <option class="form-control mb-2 mr-sm-2" value="{{listcerttypeid2}}" option selected=""
+                                id="{{listcerttypename2}}">{{listcerttypename2}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+            <div class="form-inline row">
+                <div class="col-sm-2">
+                    <label for="issue_date" class="col-form-label mb-2 mr-sm-2 float-left">Issue Date</label>
+                </div>
+                <div class="col-sm-3">
+                    <input type="date" name="issue_date" id="date" class="form-control mb-2 mr-sm-2">
+                </div>
+                <div class="col-sm-1">
+                    <label for="expiry_date" class="col-form-label mb-2 mr-sm-2">Expiry Date</label>
+                </div>
+                <div class="col-sm-3">
+                    <input type="date" name="expiry_date" id="expiry_date" class="form-control mb-2 mr-sm-2">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label for="leadtime" class="col-form-label mb-2 mr-sm-2">Lead Time</label>
+                </div>
+                <div class="col-sm-1">
+                    <input type="number" name="leadtime" id="leadtime" class="form-control mb-1" size=2px
+                        value="{{{leadTime}}}">
+                </div>
+            </div>
+            <div class="form-inline row">
+                <div class="col-sm-2">
+                    <label for="name" class="col-form-label mb-2 mr-sm-2 float-left">Cert file:</label>
+                </div>
+                <div class="col-sm-3">
+                    <input type="text" name="currentCertFile" id="currentCertFile" class="" value="{{{certfile}}}" />
+                </div>
                 <input type="file" name="newcertfile" id="newcertfile" class="">
-        </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label class="control-label" for="certproj">Project</label>
+                </div>
+                <div class="col-sm-1">
+                    <select id="certproj" name="certproj">
+                        {{#each projects}}
+                            <option value="{{projectid}}" class="form-control mb-1">{{projectname}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+            <div class="container jf-form">
+                <form data-licenseKey="" name="jqueryform-4d4fe5" id="jqueryform-4d4fe5" action='postcert' method='post'
+                    enctype='multipart/form-data' novalidate autocomplete="on">
+                    <input type="hidden" name="method" value="validateForm">
+                    <input type="hidden" id="serverValidationFields" name="serverValidationFields" value="">
+                    <div class="form-group f2 required" data-fid="f2">
+                        <div class="form-group certdevice " data-fid="certdevice">
+                            <label class="control-label" for="certdevice">Device</label>
+                            <select class="form-control" id="certdevice" name="certdevice" multiple="multiple">
+                                {{#each devices}}
+                                    <option value="{{deviceid}}">{{devicename}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+            </div>
+            <br><input type="submit" value='Submit'>
+        </form>
+        </script>
+        <br>
+        <!-- [ Start: Select2 support ] ---------------------------------- -->
+        <link rel="stylesheet" type="text/css" href="/modules/select2/dist/css/select2.min.css">
+        <script type="text/javascript" src="/modules/select2/dist/js/select2.full.min.js"></script>
+        <style type="text/css">
+            .select2-hidden-accessible {
+                opacity: 0;
+                width: 1% !important;
+            }
 
-        <div class="form-group row">
-        <div class="col-sm-2">
-      <label class="control-label" for="certproj">Project</label>
-      </div>
-      <div class="col-sm-1">
-      <select id="certproj" name="certproj" >
-        {{#each projects}}
-          <option value="{{projectid}}" class="form-control mb-1">{{projectname}}</option>
-        {{/each}}
-      </select>
-    </div>
-    </div>
+            .select2-container .select2-selection--single {
+                height: 34px;
+                padding-top: 2px;
+                box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+                border: 1px solid #ccc;
+            }
 
+            .select2-container--default .select2-selection--single .select2-selection__arrow {
+                top: 4px;
+            }
+        </style>
+        <script type="text/javascript">
+            ; (function () {
 
+                function templateResult(obj) {
+                    if (!obj.id) { return obj.text; }
 
-<div class="container jf-form">
-<form data-licenseKey="" name="jqueryform-4d4fe5" id="jqueryform-4d4fe5" action='postcert' method='post' enctype='multipart/form-data' novalidate autocomplete="on">
-<input type="hidden" name="method" value="validateForm">
-<input type="hidden" id="serverValidationFields" name="serverValidationFields" value="">
-<div class="form-group f2 required" data-fid="f2">
+                    var img = $(obj.element).data('imgSrc');
+                    if (img) {
+                        return $('<span><img src="' + img + '" class="img-flag" /> ' + obj.text + '</span>');
+                    };
 
+                    return obj.text;
+                };
 
-<div class="form-group certdevice " data-fid="certdevice">
-  <label class="control-label" for="certdevice">Device</label>
-<select class="form-control" id="certdevice" name="certdevice" multiple="multiple">
-      {{#each devices}}
-        <option value="{{deviceid}}">{{devicename}}</option>
-      {{/each}}
-</select>
-</div></div></div>
+                $(".jf-form select").css('width', '100%'); // make it responsive
+                $(".jf-form select").select2({
+                    templateResult: templateResult
+                }).change(function (e) {
+                    $(e.target).valid();
+                });
 
+            })();
+        </script>
+        <!-- [ End: Select2 support ] ---------------------------------- -->
+        <script type="text/javascript">
 
+            // start jqueryform initialization
+            // --------------------------------
+            JF.init('#jqueryform-4d4fe5');
 
-
-
-    <br><input type="submit" value='Submit'>
-</form>
-</script>
-<br>
-
-
-
-
-
-
-
-
-
-<!-- [ Start: Select2 support ] ---------------------------------- -->
-<link rel="stylesheet" type="text/css" href="/modules/select2/dist/css/select2.min.css">
-<script type="text/javascript" src="/modules/select2/dist/js/select2.full.min.js"></script>
-<style type="text/css">
-.select2-hidden-accessible{
-	opacity: 0;
-    width:1% !important;
-}
-.select2-container .select2-selection--single{
-  height: 34px;
-  padding-top: 2px;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-  border: 1px solid #ccc;
-}
-.select2-container--default .select2-selection--single .select2-selection__arrow{
-  top: 4px;
-}
-</style>
-<script type="text/javascript">
-;(function(){
-	
-	function templateResult (obj) {
-	  if (!obj.id) { return obj.text; }
-
-	  var img = $(obj.element).data('imgSrc');
-	  if( img ){
-	    return $( '<span><img src="' + img + '" class="img-flag" /> ' + obj.text + '</span>' );
-	  };
-
-	  return obj.text;
-	};
-	 
-	$(".jf-form select").css('width', '100%'); // make it responsive
-	$(".jf-form select").select2({
-	  templateResult: templateResult
-	}).change( function(e){
-	  $(e.target).valid();
-	});
-
-})();
-</script>
-<!-- [ End: Select2 support ] ---------------------------------- -->
-
-
-<script type="text/javascript">
-
-	// start jqueryform initialization
-	// --------------------------------
-	JF.init('#jqueryform-4d4fe5');
-
-	// watch form element change event to run jqueryform's formlogic
-	// ---------------------------------------------------------------
-	var logics = [
-    {
-        "disabled": false,
-        "action": "",
-        "selector": "",
-        "match": "",
-        "rules": []
-    }
-];
-	$('input,input:radio,select').change(function(){
-		$.formlogic( {logics: logics} );
-	});
-</script>
-</body>
+            // watch form element change event to run jqueryform's formlogic
+            // ---------------------------------------------------------------
+            var logics = [
+                {
+                    "disabled": false,
+                    "action": "",
+                    "selector": "",
+                    "match": "",
+                    "rules": []
+                }
+            ];
+            $('input,input:radio,select').change(function () {
+                $.formlogic({ logics: logics });
+            });
+        </script>
+        </body>
