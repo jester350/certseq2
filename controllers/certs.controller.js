@@ -400,7 +400,7 @@ module.exports.certPost = function (request, response, next) {
         console.log("body");
         var today = new Date();
         deviceid = body.certdevice;
-        const { reqname, certname, commonname, changeref, change_start_date, change_start_time, change_end, time, change_end_time, implementer_name, implementer_email, certtype, certtype2, issue_date, expiry_date, leadtime, currentCertFile, newcertfile, certproj } = body;
+        const { reqname, certname, commonname, changeref, change_start_date, change_start_time, change_end_date, change_end_time, implementer_name, implementer_email, certtype, certtype2, issue_date, expiry_date, leadtime, currentCertFile, newcertfile, certproj } = body;
         for (var i in deviceid) {
             console.log(deviceid[i]);
         }
