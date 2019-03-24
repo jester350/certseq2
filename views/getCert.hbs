@@ -97,7 +97,7 @@
                 </div>
                 <div class="col-sm-3">
                     <select name="certtype2" id="certtype2" selected={{{listcerttypename2}}}>
-                        {{#each certlist}}
+                        {{#each certlist2}}
                             <option class="form-control mb-2 mr-sm-2" value="{{listcerttypeid2}}" option selected=""
                                 id="{{listcerttypename2}}">{{listcerttypename2}}</option>
                         {{/each}}
@@ -106,6 +106,7 @@
             </div>
             <script type="text/javascript">
                 document.getElementById("{{certtypename}}").selected = "Selected";
+                document.getElementById("{{certtypename2}}").selected = "Selected";
             </script>
             <div class="form-inline row">
                 <div class="col-sm-2">
@@ -137,7 +138,7 @@
                     <label for="certRevoked" class="col-sm-0 col-form-label mb-2 mr-sm-2 float-left">Revoked</label>
                 </div>
                 <div class="col-sm-1">
-                    <input type="checkbox" name="certRevoked" id="certRevoked" value="checked"
+                    <input type="checkbox" name="certRevoked" id="certRevoked" value="unchecked"
                         onClick="JavaScript:toggleVisibility(this,'certRevokedDate');" {{{certRevoked}}}>
                 </div>
                 <input type="date" name="certRevokedDate" id="certRevokedDate" class="form-control mb-1"
@@ -199,7 +200,7 @@
     </div>
     <!-- ----------------------------------------------- -->
     <style type="text/css">
-        #certRevokedDate {
+        certRevokedDate {
             visibility: {
                     {
                     revokedVis
