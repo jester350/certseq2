@@ -32,15 +32,6 @@
             </div>
             <div class="form-group row">
                 <div class="col-sm-2">
-                    <label for="reqname" class="col-form-label mb-2 mr-sm-2">Requestor Name</label>
-                </div>
-                <div class="col-sm-3">
-                    <input type="text" name="reqname" id="reqname" class="form-control mb-2 mr-sm-2"
-                        value="{{{reqname}}}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-2">
                     <label for="name" class="col-form-label mb-2 mr-sm-2">Common Name</label>
                 </div>
                 <div class="col-sm-3">
@@ -200,28 +191,19 @@
         </form>
     </div>
     <!-- ----------------------------------------------- -->
-    <style type="text/css">
-        certRevokedDate {
-            visibility: {
-                    {
-                    revokedVis
+        <style type="text/css">
+            #certRevokedDate{visibility:{{revokedVis}};}
+        </style>
+        <script language="JavaScript">
+            function toggleVisibility(eventsender, certRevokedDate){
+                var myNewState = "hidden";
+                if (eventsender.checked === true){
+                    myNewState = "visible";
                 }
-            }
-
-            ;
-        }
-    </style>
-    <script language="JavaScript">
-
-        function toggleVisibility(eventsender, certRevokedDate) {
-            var myNewState = "hidden";
-            if (eventsender.checked === true) {
-                myNewState = "visible";
-            }
-
-            document.getElementById(certRevokedDate).style.visibility = myNewState;
-        }       
-    </script>
+                document.getElementById(certRevokedDate).style.visibility = myNewState;
+            }       
+        </script>
+        
     <!-- [ Start: Select2 support ] ---------------------------------- -->
     <link rel="stylesheet" type="text/css" href="/modules/select2/dist/css/select2.min.css">
     <script type="text/javascript" src="/modules/select2/dist/js/select2.full.min.js"></script>
